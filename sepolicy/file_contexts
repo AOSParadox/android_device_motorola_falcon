@@ -13,6 +13,7 @@
 
 #Data
 /data/ss-ram-dumps(/.*)?       				    u:object_r:ramdump_data_file:s0
+/data/tombstones/ramdump(/.*)?                              u:object_r:ramdump_data_file:s0
 
 # Motorola services
 /data/power_supply_logger(/.*)?                             u:object_r:batt_health_data_file:s0

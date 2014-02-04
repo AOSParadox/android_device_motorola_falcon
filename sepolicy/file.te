@@ -3,7 +3,7 @@ type batt_health_data_file, file_type, data_file_type;
 type sysfs_batt_health, fs_type, sysfs_type;
 
 #Log
-type ram_dump_logs, file_type, data_file_type;
+type ramdump_data_file, file_type, data_file_type;
 
 # PDS
 type pds_file, file_type;
