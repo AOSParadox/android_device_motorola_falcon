@@ -12,8 +12,8 @@
     "target_path": "device/motorola/falcon"
   },
   {
-    "repository": "android_kernel_motorola_falcon",
-    "target_path": "kernel/motorola/falcon"
+    "repository": "android_kernel_motorola_msm8226",
+    "target_path": "kernel/motorola/msm8226"
   },
   {
     "repository": "android_hardware_qcom_fm",
