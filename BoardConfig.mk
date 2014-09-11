@@ -140,6 +140,7 @@ BOARD_SEPOLICY_UNION += \
     ss_rdump.te \
     system_server.te \
     thermal-engine.te \
+    uncrypt.te \
     vold.te
 
 # Vendor init
