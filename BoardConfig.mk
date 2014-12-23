@@ -111,6 +111,9 @@ COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
 TARGET_RELEASETOOLS_EXTENSIONS := device/motorola/falcon
 
 # SELinux
+
+-include device/qcom/sepolicy/sepolicy.mk
+
 BOARD_SEPOLICY_DIRS += \
     device/motorola/falcon/sepolicy
 
