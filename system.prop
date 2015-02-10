@@ -129,3 +129,10 @@ audio.offload.gapless.enabled=true
 
 #property to set minimum frequency as 787Mhz by default
 ro.min_freq_0=787200
+
+#property to restrict number of cameras to 2
+#In L AOSP MAX camera defined as 4, compared to 2 in KK
+#Due to that and multimode architecture, camera on 8x26 target
+#will not work properly on KK as there are non-zero specific profile
+#exists in dtsi file, which is needed fo JB camera.
+persist.camera.num_cameras=2
