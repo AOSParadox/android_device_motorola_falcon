@@ -1,0 +1,104 @@
+#Maybe add CAF one ?
+
+# Audio
+ro.qc.sdk.audio.fluencetype=fluence
+persist.audio.fluence.voicecall=true
+persist.audio.fluence.voicerec=false
+persist.audio.fluence.speaker=true
+use.voice.path.for.pcm.voip=true
+audio.offload.24bit.enable=false
+audio.offload.buffer.size.kb=32
+audio.offload.gapless.enabled=true
+audio.offload.multiple.enabled=false
+audio.offload.pcm.16bit.enable=true
+audio.offload.pcm.24bit.enable=true
+av.offload.enable=true
+av.streaming.offload.enable=true
+tunnel.audio.encode=false
+ro.audio.fm_max_volume=4096
+persist.audio.calfile0=/etc/Bluetooth_cal.acdb
+persist.audio.calfile1=/etc/General_cal.acdb
+persist.audio.calfile2=/etc/Global_cal.acdb
+persist.audio.calfile3=/etc/Handset_cal.acdb
+persist.audio.calfile4=/etc/Hdmi_cal.acdb
+persist.audio.calfile5=/etc/Headset_cal.acdb
+persist.audio.calfile6=/etc/Speaker_cal.acdb
+
+# Bluetooth
+ro.qualcomm.bt.hci_transport=smd
+ro.bluetooth.hfp.ver=1.6
+ro.qualcomm.bluetooth.sap=false
+qcom.bt.le_dev_pwr_class=1
+
+# Camera
+camera2.portability.force_api=1
+
+# Display
+ro.sf.lcd_density=320
+ro.opengles.version=196608
+debug.sf.hw=1
+debug.composition.type=dyn
+persist.hwc.mdpcomp.enable=true
+debug.mdpcomp.logs=0
+debug.sf.fb_always_on=1
+
+# GPS
+ro.qc.sdk.izat.premium_enabled=0
+ro.qc.sdk.izat.service_mask=0x0
+persist.gps.qc_nlp_in_use=0
+#persist.loc.nlp_name=com.qualcomm.services.location
+ro.gps.agps_provider=1
+
+# Media
+media.stagefright.enable-player=true
+media.stagefright.enable-http=true
+media.stagefright.enable-aac=true
+media.stagefright.enable-qcp=true
+media.stagefright.enable-fma2dp=true
+media.stagefright.enable-scan=true
+mmp.enable.3g2=true
+mm.enable.smoothstreaming=true
+mm.enable.qcom_parser=37491
+
+# Qualcomm
+com.qc.hardware=true
+ro.vendor.extension_library=/system/vendor/lib/libqc-opt.so
+ro.qualcomm.cabl=0
+
+# SSR
+persist.sys.ssr.restart_level=3
+persist.sys.qc.sub.rdump.on=1
+
+# Storage
+persist.fuse_sdcard=true
+ro.crypto.fuse_sdcard=true
+persist.sys.isUsbOtgEnabled=true
+
+# Telephony
+rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so
+rild.libargs=-d /dev/smd0
+persist.rild.nitz_plmn=
+persist.rild.nitz_long_ons_0=
+persist.rild.nitz_long_ons_1=
+persist.rild.nitz_long_ons_2=
+persist.rild.nitz_long_ons_3=
+persist.rild.nitz_short_ons_0=
+persist.rild.nitz_short_ons_1=
+persist.rild.nitz_short_ons_2=
+persist.rild.nitz_short_ons_3=
+ril.subscription.types=NV,RUIM
+persist.radio.msgtunnel.start=false
+ro.use_data_netmgrd=true
+telephony.lteOnCdmaDevice=0
+persist.radio.mode_pref_nv10=1
+persist.radio.no_wait_for_card=1
+persist.radio.call_type=1
+persist.radio.apm_sim_not_pwdn=1
+persist.radio.dfr_mode_set=1
+ro.telephony.call_ring.multiple=false
+
+# Time services
+persist.timed.enable=true
+
+# Wifi
+wifi.interface=wlan0
