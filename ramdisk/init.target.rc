@@ -32,6 +32,13 @@ import init.mmi.rc
 on early-init
     mkdir /firmware 0771 system system
     symlink /data/tombstones /tombstones
+    write /sys/kernel/mm/ksm/pages_to_scan 100
+    write /sys/kernel/mm/ksm/sleep_millisecs 500
+    write /sys/kernel/mm/ksm/deferred_timer 1
+    write /sys/kernel/mm/ksm/run 1
+
+on init
+    stop ril-daemon
 
 on fs
     mount_all fstab.qcom
@@ -46,7 +53,7 @@ on fs
 
     wait /dev/block/platform/msm_sdcc.1/by-name/persist
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1
-    restorecon_recursive   /persist
+    restorecon_recursive /persist
     mkdir /persist/data 0700 system system
     mkdir /persist/data/sfs 0700 system system
     mkdir /persist/data/tz 0700 system system
@@ -78,6 +85,10 @@ on boot
 #service qcomsysd /system/bin/qcom-system-daemon
 #    class main
 
+    # display color calibration
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_ctrl
+
 #start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
@@ -101,7 +112,7 @@ service mpdecision /system/bin/mpdecision --avg_comp
    user root
    disabled
 
-service thermal-engine /system/bin/thermal-engine
+service thermal-engine /system/bin/thermal-engine -c /etc/thermal-engine-8226.conf
    class main
    user root
    socket thermal-send-client stream 0666 system system
@@ -152,6 +163,14 @@ service ppd /system/bin/mm-pp-daemon
     user system
     socket pps stream 0660 system system
     group system graphics
+
+service mmi-ril-daemon /system/bin/rild
+    class main
+    socket rild stream 660 root radio
+    socket rild-debug stream 660 radio system
+    socket cutback stream 660 media radio
+    user root
+    group radio cache inet misc audio sdcard_rw qcom_oncrpc qcom_diag log net_raw diag
 
 on property:init.svc.surfaceflinger=stopped
     stop ppd

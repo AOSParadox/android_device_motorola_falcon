@@ -1,25 +1,5 @@
 #!/system/bin/sh
 
-function advance_system_time()
-{
-        min_utc=$1
-        systime=`date +%s`
-
-        # Is current date less then minumun acceptable date
-        if [ $systime -lt $min_utc ]
-        then
-                echo "set system time to $min_utc"
-                date $min_utc
-        fi
-}
-
-# Advance system time to SW build date as early as possible
-# in the script to avoid race condition with time daemon
-build_date_utc=`getprop ro.build.date.utc`
-if [ ! -z $build_date_utc ]; then
-        advance_system_time $build_date_utc
-fi
-
 # We take this from cpuinfo because hex "letters" are lowercase there
 set -A cinfo `cat /proc/cpuinfo | /system/bin/grep Revision`
 hw=${cinfo[2]#?}
@@ -132,13 +112,4 @@ then
 			echo -e `cat /data/minFreeOff.txt` > /proc/sys/vm/min_free_normal_offset
 		fi
 	fi
-fi
-
-# check for presence of DTV device and set property
-
-if [ -e /dev/isdbt ]
-then
-	setprop dtv.hw.status ok
-else
-	setprop dtv.hw.status unavailable
 fi
