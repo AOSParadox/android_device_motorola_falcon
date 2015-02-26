@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2015 The AOSParadox Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
 # limitations under the License.
 #
 
-#Call CodeAurora MSM8226 Tree
-include device/qcom/msm8226/msm8226.mk
+
 
 DEVICE_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
 
@@ -25,6 +24,65 @@ $(call inherit-product-if-exists, vendor/motorola/falcon/falcon-vendor.mk)
 
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
+
+#Wi-Fi
+PRODUCT_COPY_FILES += \
+    device/qcom/msm8226/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+
+# Ramdisk
+PRODUCT_COPY_FILES += \
+    $(call find-copy-subdir-files,*,device/motorola/falcon/ramdisk,root)
+
+# Prebuilt
+PRODUCT_COPY_FILES += \
+    $(call find-copy-subdir-files,*,device/motorola/falcon/prebuilt/system,system)
+
+#Call CodeAurora MSM8226 Tree
+include device/qcom/msm8226/msm8226.mk
+
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=adb
+
+# Audio
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.audio.fluence.mode=endfire \
+    persist.audio.handset.mic=digital
+
+# Media
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.audio.fm_max_volume=4096 \
+    ro.qualcomm.cabl=0 \
+
+# Misc
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.usb.mtp=0x2e82 \
+    ro.usb.mtp_adb=0x2e76 \
+    ro.usb.ptp=0x2e83 \
+    ro.usb.ptp_adb=0x2e84 \
+    ro.usb.bpt=0x2e28 \
+    ro.usb.bpt_adb=0x2e29 \
+    ro.usb.bpteth=0x2e2a \
+    ro.usb.bpteth_adb=0x2e2b \
+    persist.gps.qc_nlp_in_use=0 \
+    qcom.bt.le_dev_pwr_class=1 \
+    ro.sf.lcd_density=320 \
+    ro.crypto.fuse_sdcard=true
+
+# Telephony
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.radio.call_type=1 \
+    persist.radio.no_wait_for_card=1 \
+    persist.radio.dfr_mode_set=1 \
+    persist.sys.ssr.restart_level=3 \
+    persist.sys.qc.sub.rdump.on=1 \
+    ro.config.vc_call_vol_steps=7 \
+    ro.use_data_netmgrd=true
+
+# Audio
+PRODUCT_PACKAGES += \
+    libqcompostprocbundle \
+    libqcomvisualizer \
+    libqcomvoiceprocessing
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1280
@@ -42,49 +100,21 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     lights.msm8226
 
-
 # Power
 PRODUCT_PACKAGES += \
     power.msm8226
 
+# USB
+PRODUCT_PACKAGES += \
+    com.android.future.usb.accessory
+
 #Wi-Fi
 PRODUCT_PACKAGES += \
+    dhcpcd.conf \
     wcnss_service
-
-#PRODUCT_COPY_FILES += \
-#    kernel/motorola/msm8226/drivers/net/wireless/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-#    kernel/motorola/msm8226/drivers/net/wireless/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
-PRODUCT_COPY_FILES += \
-    device/qcom/msm8226/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
-
-# Ramdisk
-PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,device/motorola/falcon/ramdisk,root)
-
-# Prebuilt
-PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,device/motorola/falcon/prebuilt/system,system)
 
 # Media codecs
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
-
-# Permissions
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
-    frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
-    frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
-    frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
-    frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
-    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
-    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
-    frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
-    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
-    frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-    frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
-    frameworks/native/data/etc/android.software.sip.xml:system/etc/permissions/android.software.sip.xml \
-    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml

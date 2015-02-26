@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2015 The AOSParadox Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ TARGET_OTA_ASSERT_DEVICE := xt1031,xt1032,xt1033,xt1034,falcon_umts,falcon_umtsd
 # Audio
 BOARD_USES_ALSA_AUDIO := true
 AUDIO_FEATURE_ENABLED_FM := true
+TARGET_USES_QCOM_COMPRESSED_AUDIO := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 
 # Bluetooth
@@ -55,8 +56,11 @@ TARGET_SYSTEMIMAGE_USE_SQUISHER := true
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
 
+#GPS
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := false
+
 # Graphics
-#BOARD_EGL_CFG := device/motorola/falcon/prebuilt/system/lib/egl/egl.cfg
+BOARD_EGL_CFG := device/qcom/msm8226/egl.cfg
 USE_OPENGL_RENDERER := true
 TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_ION := true
