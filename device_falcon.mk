@@ -66,7 +66,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.gps.qc_nlp_in_use=0 \
     qcom.bt.le_dev_pwr_class=1 \
     ro.sf.lcd_density=320 \
-    ro.crypto.fuse_sdcard=true
+    ro.crypto.fuse_sdcard=true \
+    qemu.hw.mainkeys=0
 
 # Telephony
 PRODUCT_PROPERTY_OVERRIDES += \
