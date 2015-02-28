@@ -30,7 +30,7 @@
 #ifdef HAVE_ANDROID_OS
 #include <linux/capability.h>
 #else
-#include <private/android_filesystem_capability.h>
+#include "android_filesystem_capability.h"
 #endif
 
 /* This is the master Users and Groups config for the platform.
@@ -78,8 +78,7 @@
 #define AID_SDCARD_ALL    1035  /* access all users external storage */
 #define AID_LOGD          1036  /* log daemon */
 #define AID_SHARED_RELRO  1037  /* creator of shared GNU RELRO files */
-
-#define AID_AUDIT         1049  /* audit daemon */
+#define AID_SMARTCARD     1128  /* smart card subsystem */
 
 #define AID_SHELL         2000  /* adb and debug shell user */
 #define AID_CACHE         2001  /* cache access */
@@ -95,16 +94,9 @@
 #define AID_NET_BW_STATS  3006  /* read bandwidth statistics */
 #define AID_NET_BW_ACCT   3007  /* change bandwidth statistics accounting */
 #define AID_NET_BT_STACK  3008  /* bluetooth: access config files */
-#if defined(QCOM_LEGACY_UIDS)
-#define AID_QCOM_ONCRPC   3009  /* can read/write /dev/oncrpc files */
-#define AID_QCOM_DIAG     3010  /* can read/write /dev/diag */
-#else 
 #define AID_QCOM_DIAG     3009  /* can read/write /dev/diag */
-#define AID_IMS           3010 /* can read/write /dev/socket/imsrtp */
-#define AID_SENSORS       3011 /* access to /dev/socket/sensor_ctl_socket & QCCI/QCSI */
-#endif
+#define AID_IMS 3010 /* can read/write /dev/socket/imsrtp */
 
-/* Motorola IDs */
 #define AID_MOT_ACCY      9000  /* access to accessory */
 #define AID_MOT_PWRIC     9001  /* power IC */
 #define AID_MOT_USB       9002  /* mot usb */
@@ -116,14 +108,18 @@
 #define AID_MOT_SECCLKD   9008  /* mot_secclkd */
 #define AID_MOT_WHISPER   9009  /* Whisper Protocol access */
 #define AID_MOT_CAIF      9010  /* can create CAIF sockets */
-#define AID_MOT_DLNA      9011  /* DLNA native */
+#define AID_MOT_DLNA      9011  /*DLNA native */
+#define AID_SPRINT_EXTENSION 9013  /* IKASANTISPRINT-149 sprint extension service */
+#define AID_MOT_ESDFS     9016  /* mot_esdfs for ESDFS package list parsing */
 #define AID_MOT_ATVC      9012  /* mot_atvc - This is for use of the ATVC service ONLY */
 #define AID_SPRINT_EXTENSION 9013  /* IKASANTISPRINT-149 sprint extension service */
 #define AID_MOT_DBVC      9014  /* mot_dbvc - This group is used to access DataBlock feature related data */
-/* Motorola IDs */
+#define AID_FINGERP       9015  /* IKFPS-98 Add permission group for fingerprint */
+#define AID_MOT_ESDFS     9016  /* mot_esdfs for ESDFS package list parsing */
+#define AID_POWER         9017 /* power management */
 
+#define AID_MOT_DBVC      9014  /* mot_dbvc - This group is used to access DataBlock feature */
 #define AID_EVERYBODY     9997  /* shared between all apps in the same profile */
- 
 #define AID_MISC          9998  /* access to misc storage */
 #define AID_NOBODY        9999
 
@@ -178,9 +174,6 @@ static const struct android_id_info android_ids[] = {
     { "sdcard_r",      AID_SDCARD_R, },
     { "clat",          AID_CLAT, },
     { "loop_radio",    AID_LOOP_RADIO, },
-#if defined(QCOM_LEGACY_UIDS)
-    { "qcom_oncrpc",   AID_QCOM_ONCRPC, },
-#endif
     { "mediadrm",      AID_MEDIA_DRM, },
     { "package_info",  AID_PACKAGE_INFO, },
     { "sdcard_pics",   AID_SDCARD_PICS, },
@@ -189,48 +182,46 @@ static const struct android_id_info android_ids[] = {
     { "logd",          AID_LOGD, },
     { "shared_relro",  AID_SHARED_RELRO, },
 
-    { "audit",         AID_AUDIT, },
-
     { "shell",         AID_SHELL, },
     { "cache",         AID_CACHE, },
     { "diag",          AID_DIAG, },
 
     { "net_bt_admin",  AID_NET_BT_ADMIN, },
     { "net_bt",        AID_NET_BT, },
+    { "smartcard", AID_SMARTCARD, },
     { "inet",          AID_INET, },
     { "net_raw",       AID_NET_RAW, },
     { "net_admin",     AID_NET_ADMIN, },
     { "net_bw_stats",  AID_NET_BW_STATS, },
-    { "qcom_diag", AID_QCOM_DIAG, },
-#if !defined(QCOM_LEGACY_UIDS)
     { "ims", AID_IMS, },
-#endif
     { "net_bw_acct",   AID_NET_BW_ACCT, },
     { "net_bt_stack",  AID_NET_BT_STACK, },
-    { "qcom_diag", AID_QCOM_DIAG, },
-#if !defined(QCOM_LEGACY_UIDS)
-    { "sensors",       AID_SENSORS, },
-#endif
-    /* Motorola IDs */
-    { "mot_accy",  AID_MOT_ACCY, },
-    { "mot_pwric", AID_MOT_PWRIC, },
-    { "mot_usb",   AID_MOT_USB, },
-    { "mot_drm",   AID_MOT_DRM, },
-    { "mot_tcmd",  AID_MOT_TCMD, },
-    { "mot_sec_rtc",   AID_MOT_SEC_RTC, },
-    { "mot_tombstone", AID_MOT_TOMBSTONE, },
-    { "mot_tpapi",     AID_MOT_TPAPI, },
-    { "mot_secclkd",   AID_MOT_SECCLKD, },
-    { "mot_whisper",   AID_MOT_WHISPER, },
-    { "mot_caif",  AID_MOT_CAIF, },
-    { "mot_dlna",  AID_MOT_DLNA, },
-    { "mot_atvc",      AID_MOT_ATVC, },
-    { "sprint_extension", AID_SPRINT_EXTENSION, },
-    { "mot_dbvc",      AID_MOT_DBVC, },
-    /* Motorola IDs */
+
     { "everybody",     AID_EVERYBODY, },
     { "misc",          AID_MISC, },
     { "nobody",        AID_NOBODY, },
+
+    { "qcom_diag", AID_QCOM_DIAG, },
+
+    { "mot_accy",	AID_MOT_ACCY, },
+    { "mot_pwric",	AID_MOT_PWRIC, },
+    { "mot_usb",	AID_MOT_USB, },
+    { "mot_drm",	AID_MOT_DRM, },
+    { "mot_tcmd",	AID_MOT_TCMD, },
+    { "mot_sec_rtc",	AID_MOT_SEC_RTC, },
+    { "mot_tombstone",	AID_MOT_TOMBSTONE, },
+    { "mot_tpapi",	AID_MOT_TPAPI, },
+    { "mot_secclkd",	AID_MOT_SECCLKD, },
+    { "mot_whisper",	AID_MOT_WHISPER, },
+    { "mot_caif",	AID_MOT_CAIF, },
+    { "mot_dlna",	AID_MOT_DLNA, },
+    { "sprint_extension", AID_SPRINT_EXTENSION, },
+    { "mot_dbvc",      AID_MOT_DBVC, },
+    { "fingerp",        AID_FINGERP, },
+    { "mot_esdfs",     AID_MOT_ESDFS, },
+    { "mot_atvc",      AID_MOT_ATVC, },
+    { "mot_esdfs",     AID_MOT_ESDFS, },
+    { "power",         AID_POWER, },
 };
 
 #define android_id_count \
@@ -261,15 +252,19 @@ static const struct fs_path_config android_dirs[] = {
     { 01771, AID_SYSTEM, AID_MISC,   0, "data/misc" },
     { 00770, AID_DHCP,   AID_DHCP,   0, "data/misc/dhcp" },
     { 00771, AID_SHARED_RELRO, AID_SHARED_RELRO, 0, "data/misc/shared_relro" },
-    { 00775, AID_MEDIA_RW, AID_MEDIA_RW, 0, "data/media" },
-    { 00775, AID_MEDIA_RW, AID_MEDIA_RW, 0, "data/media/Music" },
+    { 00775, AID_ROOT, AID_MEDIA_RW, 0, "data/media" },
+    { 00775, AID_ROOT, AID_MEDIA_RW, 0, "data/media/Music" },
     { 00771, AID_SYSTEM, AID_SYSTEM, 0, "data" },
     { 00750, AID_ROOT,   AID_SHELL,  0, "sbin" },
     { 00755, AID_ROOT,   AID_SHELL,  0, "system/bin" },
     { 00755, AID_ROOT,   AID_SHELL,  0, "system/vendor" },
     { 00755, AID_ROOT,   AID_SHELL,  0, "system/xbin" },
     { 00755, AID_ROOT,   AID_ROOT,   0, "system/etc/ppp" },
-    { 00755, AID_ROOT,   AID_SHELL,  0, "system/etc" },
+        /* the following two directory paths are INTENTIONALLY added
+           to ensure parent folder and sub-folders get different permissions.
+           */
+    { 00755, AID_ROOT,   AID_SYSTEM, 0, "system/multiconfig/ap/" },
+    { 00750, AID_ROOT,   AID_SYSTEM, 0, "system/multiconfig/ap" },
     { 00755, AID_ROOT,   AID_SHELL,  0, "vendor" },
     { 00777, AID_ROOT,   AID_ROOT,   0, "sdcard" },
     { 00755, AID_ROOT,   AID_ROOT,   0, 0 },
@@ -291,25 +286,31 @@ static const struct fs_path_config android_files[] = {
     { 00444, AID_RADIO,     AID_AUDIO,     0, "system/etc/AudioPara4.csv" },
     { 00555, AID_ROOT,      AID_ROOT,      0, "system/etc/ppp/*" },
     { 00555, AID_ROOT,      AID_ROOT,      0, "system/etc/rc.*" },
+    { 00750, AID_ROOT,      AID_ROOT,      0, "xbin/qe" },
+    { 00500, AID_ROOT,      AID_SHELL,     0, "system/etc/install-recovery.sh" },
     { 00644, AID_SYSTEM,    AID_SYSTEM,    0, "data/app/*" },
-    { 00644, AID_MEDIA_RW,  AID_MEDIA_RW,  0, "data/media/*" },
+    { 00644, AID_ROOT,      AID_SDCARD_RW, 0, "data/media/*" },
     { 00644, AID_SYSTEM,    AID_SYSTEM,    0, "data/app-private/*" },
     { 00644, AID_APP,       AID_APP,       0, "data/data/*" },
     { 00755, AID_ROOT,      AID_ROOT,      0, "system/bin/ping" },
+    { 00755, AID_ROOT,      AID_ROOT,      0, "init.class_main.sh" },
 
     /* the following file is INTENTIONALLY set-gid and not set-uid.
      * Do not change. */
     { 02750, AID_ROOT,      AID_INET,      0, "system/bin/netcfg" },
 
-    /* CM's daemonized su doesn't need the setuid bit */
-    { 00755, AID_ROOT,      AID_SHELL,     0, "system/xbin/su" },
     /* the following five files are INTENTIONALLY set-uid, but they
      * are NOT included on user builds. */
+    { 04750, AID_ROOT,      AID_SHELL,     0, "system/xbin/su" },
     { 06755, AID_ROOT,      AID_ROOT,      0, "system/xbin/librank" },
     { 06755, AID_ROOT,      AID_ROOT,      0, "system/xbin/procrank" },
     { 06755, AID_ROOT,      AID_ROOT,      0, "system/xbin/procmem" },
     { 06755, AID_ROOT,      AID_ROOT,      0, "system/xbin/tcpdump" },
+    /* the following file is INTENTIONALLY set-uid, and IS included
+     * in user builds. */
+    { 06750, AID_ROOT,      AID_DIAG,      0, "system/xbin/sudo" },
     { 04770, AID_ROOT,      AID_RADIO,     0, "system/bin/pppd-ril" },
+    { 04750, AID_ROOT,      AID_SYSTEM,    0, "system/bin/perf-monitor" },
 
     /* the following files have enhanced capabilities and ARE included in user builds. */
     { 00750, AID_ROOT,      AID_SHELL,     (1 << CAP_SETUID) | (1 << CAP_SETGID), "system/bin/run-as" },
@@ -317,7 +318,6 @@ static const struct fs_path_config android_files[] = {
     { 00750, AID_ROOT,      AID_ROOT,      0, "system/bin/uncrypt" },
     { 00750, AID_ROOT,      AID_ROOT,      0, "system/bin/install-recovery.sh" },
     { 00755, AID_ROOT,      AID_SHELL,     0, "system/bin/*" },
-    { 00755, AID_ROOT,      AID_SHELL,     0, "system/etc/init.d/*" },
     { 00755, AID_ROOT,      AID_ROOT,      0, "system/lib/valgrind/*" },
     { 00755, AID_ROOT,      AID_ROOT,      0, "system/lib64/valgrind/*" },
     { 00755, AID_ROOT,      AID_SHELL,     0, "system/xbin/*" },
@@ -328,7 +328,7 @@ static const struct fs_path_config android_files[] = {
     { 00750, AID_ROOT,      AID_SHELL,     0, "init*" },
     { 00750, AID_ROOT,      AID_SHELL,     0, "sbin/fs_mgr" },
     { 00640, AID_ROOT,      AID_SHELL,     0, "fstab.*" },
-    { 00755, AID_ROOT,      AID_SHELL,     0, "system/etc/init.d/*" },
+    { 00400, AID_ROOT,      AID_ROOT,      0, "module_hashes" },
     { 00644, AID_ROOT,      AID_ROOT,      0, 0 },
 };
 
