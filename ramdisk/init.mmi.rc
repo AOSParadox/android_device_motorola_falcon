@@ -1,5 +1,4 @@
 import init.mmi.usb.rc
-import init.mmi.diag.rc
 
 on early-init
     # Set boot up stage I/O scheduler
@@ -14,6 +13,7 @@ on early-init
 on init
     copy /module_hashes /sys/kernel/module_whitelist
 
+on init
     # Configure coredump
     write /proc/sys/kernel/core_pattern "|/system/bin/coredump %e %p %t"
     write /proc/self/coredump_filter "0x7f"
@@ -98,16 +98,10 @@ on fs
     exec /system/bin/chmod -L 640 /dev/block/platform/msm_sdcc.1/by-name/logs
     exec /system/bin/chown -L root:system /dev/block/platform/msm_sdcc.1/by-name/logs
 
-on fs-no-emulation
-    mount rootfs rootfs / rw remount
-    rm /sdcard
-    rm /mnt/sdcard
-    rm /storage/sdcard0
-    symlink /storage/sdcard1 /sdcard
-    symlink /storage/sdcard1 /mnt/sdcard
-    mount rootfs rootfs / ro remount
-
 on post-fs-data
+    # Trigger the defuse tool
+    setprop installd.post_fs_data_ready 1
+
     # Permissions for Factory Test of Charging Paths
     chown mot_pwric mot_pwric /sys/class/power_supply/battery/device/force_chg_auto_enable
     chown mot_pwric mot_pwric /sys/class/power_supply/battery/device/force_chg_ibatt
@@ -152,7 +146,7 @@ on post-fs-data
     mkdir /data/tpapi/etc/tpa 02770 mot_tpapi mot_tpapi
     mkdir /data/tpapi/etc/tpa/persistent 02770 mot_tpapi mot_tpapi
 
-    #Subsystem RAM-dumps
+    # Subsystem RAM-dumps
     mkdir /data/ss-ram-dumps 0750 radio log
     mkdir /data/ss-ram-dumps/bp-dumps 0750 radio log
     mkdir /data/ss-ram-dumps/riva-dumps 0750 radio log
@@ -171,15 +165,6 @@ on post-fs-data
 
     start batt_health
 
-on post-fs
-    swapon_all fstab.qcom
-    write /proc/sys/vm/page-cluster 0
-
-# To report kernel panic
-service apanic_annotate  /system/bin/sh /system/bin/apanic_annotate.sh build
-    class late_start
-    group log
-    oneshot
 
 service batt_health /system/bin/batt_health
     class main
@@ -263,92 +248,6 @@ on boot
     write /sys/bus/msm_subsys/devices/subsys2/restart_level related
     write /sys/bus/msm_subsys/devices/subsys3/restart_level related
 
-    setprop ro.hw.device ${ro.boot.device}
-    setprop ro.hw.hwrev ${ro.boot.hwrev}
-    setprop ro.hw.radio ${ro.boot.radio}
-
-service ftmipcd /system/bin/ftmipcd
-    user radio
-    group radio inet qcom_diag
-    disabled
-    oneshot
-
-on property:ro.bootmode=factory
-    start ftmipcd
-
-# Power up to suspend
-on property:tcmd.suspend=1
-    stop zygote
-    write /sys/kernel/factory_gsbi12_mode/install 1
-    setprop debug.sf.nobootanimation 1
-
-# Normal to suspend
-on property:tcmd.suspend=2
-    stop zygote
-    setprop debug.sf.nobootanimation 1
-
-service tcmd /system/bin/tcmd
-    class core
-    group mot_tcmd radio mot_pwric input system log camera graphics mot_accy sdcard_r sdcard_rw audio inet bluetooth wifi compass net_bt_admin mot_tombstone mot_tpapi mount net_raw net_admin media shell mot_usb nfc fm_radio qcom_diag mot_dbvc cache media_rw
-    socket local_tcmd stream 0660 mot_tcmd mot_tcmd
-    socket batch_socket stream 0600 mot_tcmd mot_tcmd
-    oneshot
-    disabled
-
-service tcmdhelp /system/bin/tcmdhelp
-    class main
-    socket tcmdhelp stream 0600 mot_tcmd mot_tcmd
-    oneshot
-    disabled
-
-on property:tcmd.start_tcmdhelp=1
-    start tcmdhelp
-
-on property:persist.log.aplogd.enable=1
-    start aplogd
-
-on property:persist.log.aplogd.enable=0
-    stop aplogd
-
-service aplogd /system/bin/aplogd
-    class main
-    #user log
-    #group log system sdcard_rw sdcard_r media_rw mount
-    # The user and group definitions above are intentionally disabled and left
-    # only as documentation. It actually starts as root and immediately drops
-    # to log plus those groups after preserving CAP_SYS_ADMIN, which is required
-    # for kernel logging.
-    disabled
-
-service mmi-radio-sh /system/bin/sh /init.mmi.radio.sh
-    class core
-    user radio
-    group radio
-    oneshot
-
-on property:persist.sys.diag_mdlog.on=1
-    start diag_mdlog
-
-on property:persist.sys.diag_mdlog.on=0
-    stop diag_mdlog
-
-service diag_mdlog /system/bin/diag_mdlog-wrap
-    class main
-    socket mdlog_cmd stream 0660 log diag
-    user log
-    group log sdcard_rw sdcard_r media_rw qcom_diag mount
-    disabled
-
-service dropboxd /system/bin/dropboxd
-    class late_start
-    user diag
-    group diag
-
-on property:sys.boot_completed=1
-    start qe
-    # restore the default I/O scheduler for mobile device
-    write /sys/block/mmcblk0/queue/scheduler row
-
 service mmi-boot-sh /system/bin/sh /init.mmi.boot.sh
     class core
     user root
@@ -365,17 +264,13 @@ service akmd8963 /system/bin/akmd8963
     user compass
     group compass misc input
 
-on property:ro.secure=0
-    # disable dmesg restrict for insecure builds
-    write /proc/sys/kernel/dmesg_restrict 0
-
 on property:ro.debuggable=1
     # disable dmesg restrict in eng/userdebug build
     write /proc/sys/kernel/dmesg_restrict 0
     # enable group read/write to /dev/log/kernel
     chmod 0660 /dev/log/kernel
 
-service hw_revs /system/bin/sh /system/bin/hardware_revisions.sh
+service hw_revs /system/bin/hardware_revisions.sh
     class main
     user system
     group system
@@ -427,29 +322,10 @@ service qe /xbin/qe /system
    oneshot
    disabled
 
-service ss_rdump /system/bin/subsystem_ramdump 1 0
-   class late_start
-   user radio
-   group log sdcard_rw sdcard_r diag
+#service ss_rdump /system/bin/subsystem_ramdump 1 0
+#   class late_start
+#   user radio
+#   group log sdcard_rw sdcard_r diag
 
 on property:persist.sys.qc.sub.rdump.on=*
-   write /sys/module/subsystem_restart/parameters/enable_ramdumps ${persist.sys.qc.sub.rdump.on}
-
-service esdpll /system/bin/esdpll -w
-    user mot_esdfs
-    group mot_esdfs package_info
-    disabled
-
-on property:ro.esdfs_sdcard=true
-    wait /data/media/0 600
-    mount esdfs /data/media /mnt/shell/emulated derive=legacy
-    mount none /mnt/shell/emulated/0 /storage/emulated/legacy bind
-    start esdpll
-
-# This will make sure that sdcard is bound as late_start.
-on nonencrypted
-    setprop ro.esdfs_sdcard ${persist.esdfs_sdcard}
-
-on property:vold.decrypt=trigger_restart_framework
-    setprop ro.esdfs_sdcard ${persist.esdfs_sdcard}
-    start bootanim
+    write /sys/module/subsystem_restart/parameters/enable_ramdumps ${persist.sys.qc.sub.rdump.on}
