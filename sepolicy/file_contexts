@@ -33,6 +33,10 @@
 # PDS
 /pds(/.*)?                                                  u:object_r:pds_file:s0
 
+# subsystem_ramdump related device nodes
+/dev/ramdump_.*                                             u:object_r:ramdump_device:s0
+/data/tombstones/ramdump(/.*)?                              u:object_r:ramdump_data_file:s0
+
 # Sensors
 /dev/akm8963                                                u:object_r:sensors_device:s0
 /dev/akm8963_dev                                            u:object_r:sensors_device:s0
