@@ -1,4 +1,4 @@
-# Copyright (c) 2012, The Linux Foundation. All rights reserved.
+# Copyright (c) 2012, 2014, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -49,7 +49,7 @@ on fs
 
     wait /dev/block/platform/msm_sdcc.1/by-name/persist
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1
-    restorecon_recursive /persist
+    restorecon_recursive   /persist
     mkdir /persist/data 0700 system system
     mkdir /persist/data/sfs 0700 system system
     mkdir /persist/data/tz 0700 system system
@@ -76,6 +76,8 @@ on boot
     # Enable writing to brightness node under torch-light from userspace
     chown system system /sys/class/leds/torch-light/brightness
     chmod 0666 /sys/class/leds/torch-light/brightness
+    # Enable Focaltech touch controller auto firmware update
+    write /sys/bus/i2c/drivers/ft5x06_ts/5-0038/update_fw 1
 
     # setup trace dir
     mkdir /cache/trace 0777 root shell
@@ -84,7 +86,7 @@ on boot
 
 # Allow usb charging to be disabled persistently
 on property:persist.usb.chgdisabled=1
-    write /sys/class/power_supply/battery/charging_enabled 0
+   write /sys/class/power_supply/battery/charging_enabled 0
 
 on property:persist.usb.chgdisabled=0
     write /sys/class/power_supply/battery/charging_enabled 1
@@ -96,9 +98,9 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
     group camera system inet input graphics
 
 service time_daemon /system/bin/time_daemon
-    class late_start
-    user root
-    group root
+   class late_start
+   user root
+   group root
 
 service mpdecision /system/bin/mpdecision --avg_comp
     class main
@@ -120,9 +122,9 @@ service qseecomd /system/bin/qseecomd
     group root
 
 service audiod /system/bin/audiod
-    class late_start
-    user system
-    group system
+   class late_start
+   user system
+   group system
 
 service adsprpcd /system/bin/adsprpcd
     class main
