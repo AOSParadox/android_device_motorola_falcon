@@ -11,5 +11,5 @@
 /devices/platform/msm_hsusb_host                    auto         auto    defaults                                                                       voldmanaged=usbdisk:auto
 /dev/block/platform/msm_sdcc.1/by-name/fsg          /fsg         ext4    defaults                                                                       recoveryonly
 /dev/block/platform/msm_sdcc.1/by-name/modem        /firmware    ext4    defaults                                                                       recoveryonly
-/dev/block/platform/msm_sdcc.1/by-name/persist      /persist     ext4    defaults                                                                       recoveryonly                                                                     recoveryonly
+/dev/block/platform/msm_sdcc.1/by-name/persist      /persist     ext4    defaults                                                                       recoveryonly
 /dev/block/zram0                                    none         swap    defaults     
