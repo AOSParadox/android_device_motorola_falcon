@@ -47,9 +47,12 @@ on fs
     # these partition flashed on the device. Failure to mount any partition in fstab file
     # results in failure to launch late-start class.
 
+    wait /dev/block/platform/msm_sdcc.1/by-name/cache
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/cache /cache nosuid nodev barrier=1
+
     wait /dev/block/platform/msm_sdcc.1/by-name/persist
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1
-    restorecon_recursive   /persist
+    restorecon_recursive /persist
     mkdir /persist/data 0700 system system
     mkdir /persist/data/sfs 0700 system system
     mkdir /persist/data/tz 0700 system system
@@ -70,6 +73,7 @@ on post-fs
     exec /system/bin/mount_pds.sh
 
 on boot
+    insmod /system/lib/modules/adsprpc.ko
     # Enable writing to led blink node from userspace
     chown system system /sys/class/leds/red/blink
     chown system system /sys/class/leds/green/blink
@@ -79,28 +83,39 @@ on boot
     # Enable Focaltech touch controller auto firmware update
     write /sys/bus/i2c/drivers/ft5x06_ts/5-0038/update_fw 1
 
+    # vibrator intensity
+    chown system system /sys/devices/virtual/timed_output/vibrator/vtg_level
+
+    # display color calibration
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_enable
+
     # setup trace dir
     mkdir /cache/trace 0777 root shell
     chown root shell /cache/trace
     chmod 0777 /cache/trace
 
+#Start the qcom-system-daemon service
+service qcomsysd /system/bin/qcom-system-daemon
+    class main
+
 # Allow usb charging to be disabled persistently
 on property:persist.usb.chgdisabled=1
-   write /sys/class/power_supply/battery/charging_enabled 0
+    write /sys/class/power_supply/battery/charging_enabled 0
 
 on property:persist.usb.chgdisabled=0
     write /sys/class/power_supply/battery/charging_enabled 1
 
-# start camera server as daemon
+#start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
     group camera system inet input graphics
 
 service time_daemon /system/bin/time_daemon
-   class late_start
-   user root
-   group root
+    class late_start
+    user root
+    group root
 
 service mpdecision /system/bin/mpdecision --avg_comp
     class main
@@ -122,9 +137,9 @@ service qseecomd /system/bin/qseecomd
     group root
 
 service audiod /system/bin/audiod
-   class late_start
-   user system
-   group system
+    class late_start
+    user system
+    group system
 
 service adsprpcd /system/bin/adsprpcd
     class main
@@ -132,10 +147,23 @@ service adsprpcd /system/bin/adsprpcd
     group media
 
 service wcnss-service /system/bin/wcnss_service
-    class main
+   class main
+   user system
+   group system wifi radio
+   oneshot
+
+service ppd /system/bin/mm-pp-daemon
+    class late_start
+    disabled
     user system
-    group system wifi radio
-    oneshot
+    socket pps stream 0660 system system
+    group system graphics
+
+on property:init.svc.surfaceflinger=stopped
+    stop ppd
+
+on property:init.svc.surfaceflinger=running
+    start ppd
 
 service mmi-ril-daemon /system/bin/rild
     class main

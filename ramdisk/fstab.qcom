@@ -9,4 +9,7 @@
 /dev/block/platform/msm_sdcc.1/by-name/boot         /boot        emmc    defaults                                                                       defaults
 /dev/block/platform/msm_sdcc.1/by-name/recovery     /recovery    emmc    defaults                                                                       defaults
 /devices/platform/msm_hsusb_host                    auto         auto    defaults                                                                       voldmanaged=usbdisk:auto
-/dev/block/zram0                                    none         swap    defaults                                                                       zramsize=536870912
+/dev/block/platform/msm_sdcc.1/by-name/fsg          /fsg         ext4    defaults                                                                       recoveryonly
+/dev/block/platform/msm_sdcc.1/by-name/modem        /firmware    ext4    defaults                                                                       recoveryonly
+/dev/block/platform/msm_sdcc.1/by-name/persist      /persist     ext4    defaults                                                                       recoveryonly                                                                     recoveryonly
+/dev/block/zram0                                    none         swap    defaults     
