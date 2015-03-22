@@ -46,7 +46,31 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.audio.fluence.mode=endfire \
-    persist.audio.handset.mic=digital
+    persist.audio.handset.mic=digital \
+    af.resampler.quality=4 \
+    persist.audio.calfile0=/etc/Bluetooth_cal.acdb \
+    persist.audio.calfile1=/etc/General_cal.acdb \
+    persist.audio.calfile2=/etc/Global_cal.acdb \
+    persist.audio.calfile3=/etc/Handset_cal.acdb \
+    persist.audio.calfile4=/etc/Hdmi_cal.acdb \
+    persist.audio.calfile5=/etc/Headset_cal.acdb \
+    persist.audio.calfile6=/etc/Speaker_cal.acdb
+
+PRODUCT_PACKAGES += \
+    libqcompostprocbundle \
+    libqcomvisualizer \
+    libqcomvoiceprocessing
+
+# Boot animation
+TARGET_SCREEN_HEIGHT := 1280
+TARGET_SCREEN_WIDTH := 720
+
+# GPS
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.gps.agps_provider=1 \
+    ro.qc.sdk.izat.premium_enabled=1 \
+    ro.qc.sdk.izat.service_mask=0x5 \
+    persist.gps.qc_nlp_in_use=1
 
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -69,25 +93,27 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.crypto.fuse_sdcard=true \
     qemu.hw.mainkeys=0
 
+# Storage
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.fuse_sdcard=true \
+    ro.crypto.fuse_sdcard=true \
+    persist.sys.isUsbOtgEnabled=true
+
 # Telephony
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.radio.call_type=1 \
-    persist.radio.no_wait_for_card=1 \
+    persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.dfr_mode_set=1 \
+    persist.radio.call_type=1 \
+    persist.radio.mode_pref_nv10=1 \
+    persist.radio.no_wait_for_card=1 \
     persist.sys.ssr.restart_level=3 \
     persist.sys.qc.sub.rdump.on=1 \
     ro.config.vc_call_vol_steps=7 \
     ro.use_data_netmgrd=true
 
-# Audio
-PRODUCT_PACKAGES += \
-    libqcompostprocbundle \
-    libqcomvisualizer \
-    libqcomvoiceprocessing
-
-# Boot animation
-TARGET_SCREEN_HEIGHT := 1280
-TARGET_SCREEN_WIDTH := 720
+# Time services
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.timed.enable=true
 
 # GPS
 PRODUCT_PACKAGES += \
