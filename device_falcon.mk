@@ -106,8 +106,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.call_type=1 \
     persist.radio.mode_pref_nv10=1 \
     persist.radio.no_wait_for_card=1 \
+    persist.radio.apn_delay=5000 \
     persist.sys.ssr.restart_level=3 \
     persist.sys.qc.sub.rdump.on=1 \
+    persist.sys.qc.sub.rdump.max=0 \
     ro.config.vc_call_vol_steps=7 \
     ro.use_data_netmgrd=true
 
