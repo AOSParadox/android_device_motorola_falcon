@@ -305,7 +305,6 @@ static const struct fs_path_config android_files[] = {
     { 06755, AID_ROOT,      AID_ROOT,      0, "system/xbin/librank" },
     { 06755, AID_ROOT,      AID_ROOT,      0, "system/xbin/procrank" },
     { 06755, AID_ROOT,      AID_ROOT,      0, "system/xbin/procmem" },
-    { 06755, AID_ROOT,      AID_ROOT,      0, "system/xbin/tcpdump" },
     /* the following file is INTENTIONALLY set-uid, and IS included
      * in user builds. */
     { 06750, AID_ROOT,      AID_DIAG,      0, "system/xbin/sudo" },

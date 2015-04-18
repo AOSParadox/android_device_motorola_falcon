@@ -38,6 +38,9 @@ BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 # Assert
 TARGET_OTA_ASSERT_DEVICE := xt1031,xt1032,xt1033,xt1034,falcon_umts,falcon_umtsds,falcon_cdma,falcon_retuaws,falcon,falcon_gpe
 
+# Board
+TARGET_BOARD_INFO_FILE := device/motorola/falcon/board-info.txt
+
 # Audio
 BOARD_USES_ALSA_AUDIO := true
 AUDIO_FEATURE_ENABLED_COMPRESS_CAPTURE := true
@@ -103,6 +106,9 @@ TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
+
+# Release tools
+TARGET_RELEASETOOLS_EXTENSIONS := device/motorola/falcon
 
 # SELinux
 BOARD_SEPOLICY_DIRS += \
