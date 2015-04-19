@@ -29,12 +29,12 @@
 ssr_str="$1"
 IFS=,
 ssr_array=($ssr_str)
-typeset -i subsys_mask=0
+declare -i subsys_mask=0
 
 # check user input subsystem with system device
 ssr_check_subsystem_name()
 {
-    typeset -i i=0
+    declare -i i=0
     subsys=`cat /sys/bus/msm_subsys/devices/subsys$i/name`
     while [ "$subsys" != "" ]
     do

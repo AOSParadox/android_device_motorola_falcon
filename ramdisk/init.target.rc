@@ -1,4 +1,4 @@
-# Copyright (c) 2012, The Linux Foundation. All rights reserved.
+# Copyright (c) 2012, 2014, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -47,6 +47,9 @@ on fs
     wait /dev/block/platform/msm_sdcc.1/by-name/persist
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1
     restorecon_recursive /persist
+    mkdir /persist/data 0700 system system
+    mkdir /persist/data/sfs 0700 system system
+    mkdir /persist/data/tz 0700 system system
 
     wait /dev/block/platform/msm_sdcc.1/by-name/modem
     exec /system/bin/resize2fs /dev/block/platform/msm_sdcc.1/by-name/modem
@@ -65,19 +68,44 @@ on boot
     # Enable writing to led blink node from userspace
     chown system system /sys/class/leds/red/blink
     chown system system /sys/class/leds/green/blink
+    # Enable writing to brightness node under torch-light from userspace
+    chown system system /sys/class/leds/torch-light/brightness
+    chmod 0666 /sys/class/leds/torch-light/brightness
+    # Enable Focaltech touch controller auto firmware update
+    write /sys/bus/i2c/drivers/ft5x06_ts/5-0038/update_fw 1
+
+    # vibrator intensity
+    chown system system /sys/devices/virtual/timed_output/vibrator/vtg_level
+
+    # Display calibration
+    chown system system /sys/devices/virtual/graphics/fb0/rgb
+    chmod 0660 /sys/devices/virtual/graphics/fb0/rgb
+
+    # High brightness mode
+    chown system system /sys/devices/virtual/graphics/fb0/hbm
+    chmod 0660 /sys/devices/virtual/graphics/fb0/hbm
+
+    # setup trace dir
+    mkdir /cache/trace 0777 root shell
+    chown root shell /cache/trace
+    chmod 0777 /cache/trace
+
+#Start the qcom-system-daemon service
+service qcomsysd /system/bin/qcom-system-daemon
+    class main
+
+# Allow usb charging to be disabled persistently
+on property:persist.usb.chgdisabled=1
+    write /sys/class/power_supply/battery/charging_enabled 0
+
+on property:persist.usb.chgdisabled=0
+    write /sys/class/power_supply/battery/charging_enabled 1
 
 #start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
     group camera system inet input graphics
-
-# Allow usb charging to be disabled persistently
-on property:persist.usb.chgdisabled=1
-   write /sys/class/power_supply/battery/charging_enabled 0
-
-on property:persist.usb.chgdisabled=0
-   write /sys/class/power_supply/battery/charging_enabled 1
 
 service time_daemon /system/bin/time_daemon
    class late_start
@@ -88,12 +116,17 @@ service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
    user root
    disabled
 
-service thermal-engine /system/bin/thermal-engine
+service thermal-engine /system/bin/thermal-engine -c /etc/thermal-engine-8226.conf
    class main
    user root
    group root
 
 service qseecomd /system/bin/qseecomd
+    class late_start
+    user root
+    group root
+
+service audiod /system/bin/audiod
     class late_start
     user system
     group system
@@ -104,12 +137,21 @@ service adsprpcd /system/bin/adsprpcd
    group media
 
 service wcnss-service /system/bin/wcnss_service
-   class late_start
+   class main
    user system
-   group system wifi
-   disabled
+   group system wifi radio
    oneshot
 
-on property:wlan.driver.ath=0
-    start wcnss-service
+service ppd /system/bin/mm-pp-daemon
+    class late_start
+    disabled
+    user system
+    socket pps stream 0660 system system
+    group system graphics
+
+on property:init.svc.surfaceflinger=stopped
+    stop ppd
+
+on property:init.svc.surfaceflinger=running
+    start ppd
 
