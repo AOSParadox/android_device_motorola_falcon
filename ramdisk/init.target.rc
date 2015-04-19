@@ -1,4 +1,4 @@
-# Copyright (c) 2012, 2014, The Linux Foundation. All rights reserved.
+# Copyright (c) 2012, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -32,13 +32,6 @@ import init.mmi.rc
 on early-init
     mkdir /firmware 0771 system system
     symlink /data/tombstones /tombstones
-    write /sys/kernel/mm/ksm/pages_to_scan 100
-    write /sys/kernel/mm/ksm/sleep_millisecs 500
-    write /sys/kernel/mm/ksm/deferred_timer 1
-    write /sys/kernel/mm/ksm/run 1
-
-on init
-    stop ril-daemon
 
 on fs
     mount_all fstab.qcom
@@ -54,9 +47,6 @@ on fs
     wait /dev/block/platform/msm_sdcc.1/by-name/persist
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1
     restorecon_recursive /persist
-    mkdir /persist/data 0700 system system
-    mkdir /persist/data/sfs 0700 system system
-    mkdir /persist/data/tz 0700 system system
 
     wait /dev/block/platform/msm_sdcc.1/by-name/modem
     exec /system/bin/resize2fs /dev/block/platform/msm_sdcc.1/by-name/modem
@@ -75,44 +65,19 @@ on boot
     # Enable writing to led blink node from userspace
     chown system system /sys/class/leds/red/blink
     chown system system /sys/class/leds/green/blink
-    # Enable writing to brightness node under torch-light from userspace
-    chown system system /sys/class/leds/torch-light/brightness
-    chmod 0666 /sys/class/leds/torch-light/brightness
-    # Enable Focaltech touch controller auto firmware update
-    write /sys/bus/i2c/drivers/ft5x06_ts/5-0038/update_fw 1
-
-    # vibrator intensity
-    chown system system /sys/devices/virtual/timed_output/vibrator/vtg_level
-
-    # Display calibration
-    chown system system /sys/devices/virtual/graphics/fb0/rgb
-    chmod 0660 /sys/devices/virtual/graphics/fb0/rgb
-
-    # High brightness mode
-    chown system system /sys/devices/virtual/graphics/fb0/hbm
-    chmod 0660 /sys/devices/virtual/graphics/fb0/hbm
-
-    # setup trace dir
-    mkdir /cache/trace 0777 root shell
-    chown root shell /cache/trace
-    chmod 0777 /cache/trace
-
-#Start the qcom-system-daemon service
-service qcomsysd /system/bin/qcom-system-daemon
-    class main
-
-# Allow usb charging to be disabled persistently
-on property:persist.usb.chgdisabled=1
-    write /sys/class/power_supply/battery/charging_enabled 0
-
-on property:persist.usb.chgdisabled=0
-    write /sys/class/power_supply/battery/charging_enabled 1
 
 #start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
     group camera system inet input graphics
+
+# Allow usb charging to be disabled persistently
+on property:persist.usb.chgdisabled=1
+   write /sys/class/power_supply/battery/charging_enabled 0
+
+on property:persist.usb.chgdisabled=0
+   write /sys/class/power_supply/battery/charging_enabled 1
 
 service time_daemon /system/bin/time_daemon
    class late_start
@@ -123,20 +88,12 @@ service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
    user root
    disabled
 
-service thermal-engine /system/bin/thermal-engine -c /etc/thermal-engine-8226.conf
-    class main
-    user root
-    socket thermal-send-client stream 0666 system system
-    socket thermal-recv-client stream 0660 system system
-    socket thermal-recv-passive-client stream 0666 system system
-    group root
+service thermal-engine /system/bin/thermal-engine
+   class main
+   user root
+   group root
 
 service qseecomd /system/bin/qseecomd
-    class late_start
-    user root
-    group root
-
-service audiod /system/bin/audiod
     class late_start
     user system
     group system
@@ -147,28 +104,12 @@ service adsprpcd /system/bin/adsprpcd
    group media
 
 service wcnss-service /system/bin/wcnss_service
-   class main
+   class late_start
    user system
-   group system wifi radio
+   group system wifi
+   disabled
    oneshot
 
-service ppd /system/bin/mm-pp-daemon
-    class late_start
-    disabled
-    user system
-    socket pps stream 0660 system system
-    group system graphics
+on property:wlan.driver.ath=0
+    start wcnss-service
 
-on property:init.svc.surfaceflinger=stopped
-    stop ppd
-
-on property:init.svc.surfaceflinger=running
-    start ppd
-
-service mmi-ril-daemon /system/bin/rild
-    class main
-    socket rild stream 660 root radio
-    socket rild-debug stream 660 radio system
-    socket cutback stream 660 media radio
-    user root
-    group radio cache inet misc audio sdcard_rw qcom_oncrpc qcom_diag log net_raw diag
