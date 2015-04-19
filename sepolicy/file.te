@@ -8,6 +8,3 @@ type vibeamp_sysfs, fs_type, sysfs_type;
 
 # PDS
 type pds_file, file_type;
-
-#Ramdump
-type ramdump_device, dev_type;
