@@ -135,7 +135,6 @@ BOARD_SEPOLICY_UNION += \
     property.te \
     rild.te \
     rmt_storage.te \
-    subsystem_ramdup.te \
     system_app.te \
     thermal-engine.te
 
