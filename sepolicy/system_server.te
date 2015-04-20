@@ -1,2 +1,6 @@
 allow system_server display_sysfs:file { getattr open read write };
 allow system_server vibeamp_sysfs:file { getattr open read write };
+
+# Read /data/tombstones/ramdump files - Just in case that's not only tombstones
+allow system_server ram_dump_logs:dir r_dir_perms;
+allow system_server ram_dump_logs:file r_file_perms;

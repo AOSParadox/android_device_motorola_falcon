@@ -1,6 +1,10 @@
 #Allow subsystem_ramdump
 
 userdebug_or_eng(`
-allow subsystem_ramdup ram_dump_logs:dir create_dir_perms;
-allow subsystem_ramdup ram_dump_logs:file create_file_perms;
+allow subsystem_ramdump ram_dump_logs:dir create_dir_perms;
+allow subsystem_ramdump ram_dump_logs:file create_file_perms;
+allow subsystem_ramdump subsystem_ramdump_exec:dir create_dir_perms;
+allow subsystem_ramdump subsystem_ramdump_exec:file create_file_perms;
+allow subsystem_ramdump ram_dump_logs:file { execute };
+allow subsystem_ramdump subsystem_ramdump_exec:file { execute };
 ')
