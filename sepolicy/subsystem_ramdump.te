@@ -1,7 +1,6 @@
-#Allow susbsystem_ramdump
+#Allow subsystem_ramdump
 
 userdebug_or_eng(`
-  allow subsystem_ramdump ramdump_data_file:dir rw_dir_perms;
-  allow subsystem_ramdump ramdump_data_file:file create_file_perms;
-  allow subsystem_ramdump tombstone_data_file:dir search;
+allow subsystem_ramdup ram_dump_logs:dir create_dir_perms;
+allow subsystem_ramdup ram_dump_logs:file create_file_perms;
 ')
