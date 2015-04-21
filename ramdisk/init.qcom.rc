@@ -37,24 +37,26 @@ on init
     mkdir /persist 0771 system system
     # See storage config details at http://source.android.com/tech/storage/
     mkdir /mnt/shell/emulated 0700 shell shell
-    mkdir /storage 0555 system sdcard_r
     mkdir /storage/emulated 0555 root root
-    mkdir /storage/emulated/legacy 0555 root root
-    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
 
-    # External storage directories
+    #External storage directories
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+    mkdir /storage/sdcard1 0700 root root
     mkdir /mnt/media_rw/usbdisk 0700 media_rw media_rw
     mkdir /storage/usbdisk 0700 root root
 
     export EXTERNAL_STORAGE /storage/emulated/legacy
     export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
     export EMULATED_STORAGE_TARGET /storage/emulated
+    export SECONDARY_STORAGE /storage/sdcard1
 
     # Support legacy paths
     symlink /storage/emulated/legacy /sdcard
     symlink /storage/emulated/legacy /mnt/sdcard
     symlink /storage/emulated/legacy /storage/sdcard0
     symlink /mnt/shell/emulated/0 /storage/emulated/legacy
+    symlink /storage/sdcard1 /mnt/sdcard1
+    symlink /storage/sdcard1 /external_sd
     symlink /storage/usbdisk /usbdisk
     symlink /storage/usbdisk /mnt/usbdisk
 
@@ -64,8 +66,10 @@ on fs
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
+
     # Allow subsystem (modem etc) debugging
-    write /sys/module/subsystem_restart/parameters/enable_debug ${persist.sys.ssr.enable_debug}
+    # write /sys/module/subsystem_restart/parameters/enable_debug ${persist.sys.ssr.enable_debug}
+
     write /sys/kernel/boot_adsp/boot 1
     exec /system/bin/sh /init.qcom.early_boot.sh ${ro.board.platform}
     exec /system/bin/sh /init.qcom.syspart_fixup.sh ${ro.board.platform} ${ro.serialno}
@@ -192,13 +196,8 @@ on boot
     # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
-    # NFC local data and nfcee xml storage
-    mkdir /data/nfc 0770 nfc nfc
-    mkdir /data/nfc/param 0770 nfc nfc
-
-    # Set the console loglevel to < KERN_INFO
-    # Set the default message loglevel to KERN_INFO
-    write /proc/sys/kernel/printk "6 6 1 7"
+    # When GPU woken by touch events, keep it on until first app render
+    write /sys/class/kgsl/kgsl-3d0/wake_timeout 250
 
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -213,6 +212,10 @@ on post-fs-data
 
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
 
+    # NFC local data and nfcee xml storage
+    mkdir /data/nfc 0770 nfc nfc
+    mkdir /data/nfc/param 0770 nfc nfc
+
     # Create the directories used by the Wireless subsystem
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
@@ -223,6 +226,8 @@ on post-fs-data
     # Create the directories used by CnE subsystem
     mkdir /data/connectivity 0771 system system
     chown system system /data/connectivity
+    mkdir /data/connectivity/nsrm 0771 system system
+    chown system system /data/connectivity/nsrm
 
     # Create the directories used by DPM subsystem
     mkdir /data/dpm 0771 system system
@@ -296,11 +301,24 @@ service usbhub_init /system/bin/usbhub_init
    disabled
    oneshot
 
+#service qcomsysd /system/bin/qcom-system-daemon
+#    class main
+
+service ssr_setup /system/bin/ssr_setup
+    oneshot
+    disabled
+
+on property:persist.sys.ssr.restart_level=*
+    start ssr_setup
+
+on property:sys.boot_completed=1
+    write /dev/kmsg "Boot completed "
+
 on property:persist.radio.atfwd.start=false
     stop atfwd
 
-on property:persist.radio.atfwd.start=true
-    start atfwd
+on property:radio.atfwd.start=false
+    stop atfwd
 
 # corefile limit and ETB enabling
 on property:persist.debug.trace=1
@@ -360,14 +378,14 @@ service qcom-c_core-sh /system/bin/sh /init.qcom.class_core.sh
 
 service qcom-c_main-sh /system/bin/sh /init.class_main.sh
     class main
-    user root
+    user radio
+    group radio
     oneshot
 
+
 on property:vold.decrypt=trigger_restart_framework
-    setprop ro.fuse_sdcard ${persist.fuse_sdcard}
     start qcom-c_main-sh
     start config_bluetooth
-    start ril-qmi
 
 on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
@@ -454,23 +472,19 @@ on property:bluetooth.hciattach=false
 #    disabled
 #    oneshot
 
-#service bridgemgrd /system/bin/bridgemgrd
-#    class late_start
-#    user radio
-#    group radio qcom_diag
-#    disabled
+service btsnoop /system/bin/btsnoop
+   user bluetooth
+   group bluetooth net_bt_admin sdcard_rw sdcard_r
+   class late_start
+   disabled
+   oneshot
 
-#service port-bridge /system/bin/port-bridge /dev/smd0 /dev/ttyGS0
-#    class late_start
-#    user system
-#    group system inet
-#    disabled
-
-#service qmiproxy /system/bin/qmiproxy
-#    class main
-#    user radio
-#    group radio qcom_diag
-#    disabled
+service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
+    class late_start
+    user root
+    group bluetooth net_bt_admin misc net_bt_stack qcom_diag
+    disabled
+    oneshot
 
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /system/bin/qmuxd
@@ -526,12 +540,10 @@ service btwlancoex /system/bin/sh /system/etc/init.qcom.coex.sh
 #    oneshot
 
 service p2p_supplicant /system/bin/wpa_supplicant \
-    -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf \
-    -I/system/etc/wifi/p2p_supplicant_overlay.conf -N \
-    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+    -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf -N \
+    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -dddd \
     -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -O/data/misc/wifi/sockets -puse_p2p_group_interface=1 -dd \
-    -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
+    -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0 -puse_p2p_group_interface=1
 #   we will start as root and wpa_supplicant will switch to user wifi
 #   after setting up the capabilities required for WEXT
 #   user wifi
@@ -542,9 +554,8 @@ service p2p_supplicant /system/bin/wpa_supplicant \
     oneshot
 
 service wpa_supplicant /system/bin/wpa_supplicant \
-    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -dddd \
     -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -O/data/misc/wifi/sockets -dd \
     -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
     #   we will start as root and wpa_supplicant will switch to user wifi
     #   after setting up the capabilities required for WEXT
@@ -555,7 +566,7 @@ service wpa_supplicant /system/bin/wpa_supplicant \
     disabled
     oneshot
 
-service dhcpcd_wlan0 /system/bin/dhcpcd -ABKLG
+service dhcpcd_wlan0 /system/bin/dhcpcd
     class late_start
     disabled
     oneshot
@@ -678,7 +689,7 @@ service atfwd /system/bin/ATFWD-daemon
     user system
     group system radio
 
-service hostapd /system/bin/hostapd -dd /data/hostapd/hostapd.conf
+service hostapd /system/bin/hostapd -dddd /data/hostapd/hostapd.conf
     class late_start
     user root
     group root
@@ -719,13 +730,6 @@ service ril-daemon2 /system/bin/rild -c 3
     disabled
     group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
 
-service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
-    class late_start
-
-service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/usbdisk /storage/usbdisk
-    class late_start
-    disabled
-
 service usb_uicc_enable /system/bin/sh /system/etc/init.qcom.uicc.sh
     class late_start
     user root
@@ -759,15 +763,12 @@ on property:usb_uicc.enabled=0
 
 service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
     class late_start
+
+service hcidump /system/bin/sh /system/etc/hcidump.sh
+    user bluetooth
+    group bluetooth system net_bt_admin net_admin
     disabled
-
-on property:ro.fuse_sdcard=true
-    start sdcard
-
-# Binding fuse mount point to /storage/emulated/legacy
-on property:init.svc.sdcard=running
-    wait /mnt/shell/emulated/0 600
-    mount none /mnt/shell/emulated/0 /storage/emulated/legacy bind
+    oneshot
 
 # This will make sure that sdcard service starts as late_start.
 on nonencrypted
@@ -819,6 +820,7 @@ on property:persist.usb.hvdcp.detect=true
 on property:persist.usb.hvdcp.detect=false
     stop hvdcp
 
+# moto: charger_monitor does not exist
 #service charger_monitor /system/bin/charger_monitor
 #    user system
 #    group system
@@ -834,6 +836,7 @@ on property:sys.qbcharger.enable=true
 on property:sys.qbcharger.enable=false
     stop qbcharger
 
+# MOT Security Asset CR IKJBMR2-6392
 #service diag_mdlog_start /system/bin/diag_mdlog
 #    class late_start
 #    user shell

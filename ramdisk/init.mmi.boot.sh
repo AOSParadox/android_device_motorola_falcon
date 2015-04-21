@@ -113,3 +113,12 @@ then
 		fi
 	fi
 fi
+
+# check for presence of DTV device and set property
+
+if [ -e /dev/isdbt ]
+then
+	setprop dtv.hw.status ok
+else
+	setprop dtv.hw.status unavailable
+fi

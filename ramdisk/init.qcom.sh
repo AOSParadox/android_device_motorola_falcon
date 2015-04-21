@@ -38,11 +38,9 @@ fi
 start_sensors()
 {
     if [ -c /dev/msm_dsps -o -c /dev/sensors ]; then
-        mkdir -p /data/system/sensors
-        touch /data/system/sensors/settings
-        chmod -h 775 /data/system/sensors
-        chmod -h 664 /data/system/sensors/settings
-        chown -h system /data/system/sensors/settings
+        chmod -h 775 /persist/sensors
+        chmod -h 664 /persist/sensors/sensors_settings
+        chown -h system.root /persist/sensors/sensors_settings
 
         mkdir -p /data/misc/sensors
         chmod -h 775 /data/misc/sensors

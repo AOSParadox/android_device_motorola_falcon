@@ -38,6 +38,13 @@ on init
     chown system system /sys/module/ct406/parameters/als_delay
     chmod 0660 /sys/module/ct406/parameters/als_delay
 
+    # NFC PN544
+    chown nfc nfc /sys/devices/virtual/misc/pn544/pn544_control_dev
+    chmod 0660 /sys/devices/virtual/misc/pn544/pn544_control_dev
+
+    # ESDFS
+    chown mot_esdfs root /proc/fs/esdfs/packages
+
 on fs
     # Mount PDS
     wait /dev/block/platform/msm_sdcc.1/by-name/pds
@@ -89,15 +96,6 @@ on fs
     # Set permissions for BL logs
     exec /system/bin/chmod -L 640 /dev/block/platform/msm_sdcc.1/by-name/logs
     exec /system/bin/chown -L root:system /dev/block/platform/msm_sdcc.1/by-name/logs
-
-on fs-no-emulation
-    mount rootfs rootfs / rw remount
-    rm /sdcard
-    rm /mnt/sdcard
-    rm /storage/sdcard0
-    symlink /storage/sdcard1 /sdcard
-    symlink /storage/sdcard1 /mnt/sdcard
-    mount rootfs rootfs / ro remount
 
 on post-fs-data
     # Permissions for Factory Test of Charging Paths
@@ -286,11 +284,17 @@ service hw_revs /system/bin/hardware_revisions.sh
     group system
     oneshot
 
+service mbm_spy /system/bin/mbm_spy
+    class late_start
+    user system
+    group system
+    oneshot
+
 # DHCP service for Ethernet
 service dhcpcd_eth0 /system/bin/dhcpcd -G
-    class late_start
-    disabled
-    oneshot
+   class late_start
+   disabled
+   oneshot
 
 service iprenew_eth0 /system/bin/dhcpcd -nBK
    class late_start
@@ -327,17 +331,3 @@ service esdpll /system/bin/esdpll -w
     user mot_esdfs
     group mot_esdfs package_info
     disabled
-
-on property:ro.esdfs_sdcard=true
-    wait /data/media/0 600
-    mount esdfs /data/media /mnt/shell/emulated derive=legacy
-    mount none /mnt/shell/emulated/0 /storage/emulated/legacy bind
-    start esdpll
-
-# This will make sure that sdcard is bound as late_start.
-on nonencrypted
-    setprop ro.esdfs_sdcard ${persist.esdfs_sdcard}
-
-on property:vold.decrypt=trigger_restart_framework
-    setprop ro.esdfs_sdcard ${persist.esdfs_sdcard}
-    start bootanim

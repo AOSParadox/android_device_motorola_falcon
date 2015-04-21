@@ -5,6 +5,6 @@ allow subsystem_ramdump ram_dump_logs:dir create_dir_perms;
 allow subsystem_ramdump ram_dump_logs:file create_file_perms;
 allow subsystem_ramdump subsystem_ramdump_exec:dir create_dir_perms;
 allow subsystem_ramdump subsystem_ramdump_exec:file create_file_perms;
-allow subsystem_ramdump ram_dump_logs:file { execute };
-allow subsystem_ramdump subsystem_ramdump_exec:file { execute };
+#allow subsystem_ramdump ram_dump_logs:file { execute };
+#allow subsystem_ramdump subsystem_ramdump_exec:file { execute };
 ')
