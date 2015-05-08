@@ -57,8 +57,6 @@ on fs
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/modem /firmware ro nosuid nodev barrier=0 context=u:object_r:firmware_file:s0
     write /sys/kernel/boot_adsp/boot 1
 
-    setprop ro.crypto.fuse_sdcard true
-
 on post-fs-data
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
