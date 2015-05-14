@@ -302,9 +302,6 @@ service iprenew_eth0 /system/bin/dhcpcd -nBK
    disabled
    oneshot
 
-on property:ro.debuggable=1
-    start ss_ramdump
-
 service atvc_core /system/bin/dbvc_atvc_property_set
    class core
    user mot_atvc
@@ -324,8 +321,9 @@ service qe /xbin/qe /system
    disabled
 
 service ss_ramdump /system/bin/subsystem_ramdump 1 0
+   user root
+   group root system radio
    class late_start
-   user radio
    group log sdcard_rw sdcard_r diag
 
 on property:persist.sys.qc.sub.rdump.on=*
