@@ -648,10 +648,10 @@ service xtwifi_client /system/bin/xtwifi-client
     disabled
 
 #Maybe unused
-service loc_launcher /system/bin/loc_launcher
-    #loc_launcher will start as root and set its uid to gps
-    class late_start
-    group gps qcom_oncrpc inet net_raw qcom_diag net_admin wifi
+#service loc_launcher /system/bin/loc_launcher
+#    #loc_launcher will start as root and set its uid to gps
+#    class late_start
+#    group gps qcom_oncrpc inet net_raw qcom_diag net_admin wifi
 
 service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     class late_start

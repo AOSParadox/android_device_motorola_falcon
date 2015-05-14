@@ -79,7 +79,7 @@ on fs
 
     # Mount modem FSG partition
     wait /dev/block/platform/msm_sdcc.1/by-name/fsg
-    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/fsg /fsg ro nosuid nodev barrier=0 context=u:object_r:fsg_file:s0
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/fsg /fsg ro nosuid nodev barrier=0 context=u:object_r:firmware_file:s0
 
 
     # Set correct permissions for HOB, DHOB
@@ -314,11 +314,11 @@ service atvc /system/bin/dbvc_atvc_property_set
    group mot_tpapi
    oneshot
 
-service qe /xbin/qe /system
-   class main
-   seclabel u:r:qe:s0
-   oneshot
-   disabled
+#service qe /xbin/qe /system
+#   class main
+#   seclabel u:r:qe:s0
+#   oneshot
+#   disabled
 
 service ss_ramdump /system/bin/subsystem_ramdump 1 0
    user root
