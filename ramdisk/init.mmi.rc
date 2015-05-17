@@ -320,7 +320,7 @@ service atvc /system/bin/dbvc_atvc_property_set
 #   oneshot
 #   disabled
 
-service ss_ramdump /system/bin/subsystem_ramdump 1 0
+service subsystem_ramdump /system/bin/subsystem_ramdump 1 0
    user root
    group root system radio
    class late_start
