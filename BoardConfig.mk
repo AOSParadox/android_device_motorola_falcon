@@ -71,6 +71,9 @@ TARGET_SYSTEMIMAGE_USE_SQUISHER := true
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
 
+# Charger
+BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
+
 #GPS
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := false
 
@@ -121,6 +124,7 @@ BOARD_SEPOLICY_UNION += \
     akmd8963.te \
     atvc.te \
     batt_health.te \
+    bootanim.te \
     device.te \
     file_contexts \
     file.te \

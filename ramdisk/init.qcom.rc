@@ -321,6 +321,7 @@ on property:persist.debug.trace=1
     write /sys/devices/system/cpu/cpu1/online 1
     write /sys/devices/system/cpu/cpu2/online 1
     write /sys/devices/system/cpu/cpu3/online 1
+    write /sys/module/msm_pm/modes/cpu0/standalone_power_collapse/idle_enabled 1
     write /sys/bus/coresight/devices/coresight-etm0/enable 0
     write /sys/bus/coresight/devices/coresight-etm1/enable 0
     write /sys/bus/coresight/devices/coresight-etm2/enable 0
@@ -681,6 +682,11 @@ service qcom-sh /system/bin/sh /init.qcom.sh
     class late_start
     user root
     oneshot
+
+# Charger
+on charger
+    wait /dev/block/platform/msm_sdcc.1/by-name/system
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/system /system ro barrier=1
 
 service qcom-post-boot /system/bin/sh /system/etc/init.qcom.post_boot.sh
     class late_start
