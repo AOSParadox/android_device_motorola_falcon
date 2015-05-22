@@ -26,7 +26,7 @@ KERNEL_ZIMG := $(KERNEL_OUT)/arch/arm/boot/zImage
 DTC = $(KERNEL_OUT)/scripts/dtc/dtc
 
 define append-dtb
-mkdir -p $(KERNEL_OUT)/arch/arm/boot;\
+#mkdir -p $(KERNEL_OUT)/arch/arm/boot;\
 $(foreach d, $(DTB_FILES), \
       $(DTC) -p 1024 -O dtb -o $(call DTB_FILE,$(d)) $(d); \
       cat $(KERNEL_ZIMG) $(call DTB_FILE,$(d)) > $(call ZIMG_FILE,$(d));))
