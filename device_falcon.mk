@@ -29,9 +29,14 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 PRODUCT_PACKAGES += \
     MotoDoze
 
-#Wi-Fi
+#WCNSS
+PRODUCT_PACKAGES += \
+    WCNSS_qcom_wlan_factory_nv.bin \
+    WCNSS_qcom_cfg.ini
+
 PRODUCT_COPY_FILES += \
-    device/qcom/msm8226/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+    device/qcom/msm8226/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin \
+    device/qcom/msm8226/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
 
 # Ramdisk
 PRODUCT_COPY_FILES += \
