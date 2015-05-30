@@ -25,6 +25,10 @@ $(call inherit-product-if-exists, vendor/motorola/falcon/falcon-vendor.mk)
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
+# Doze
+PRODUCT_PACKAGES += \
+    MotoDoze
+
 #Wi-Fi
 PRODUCT_COPY_FILES += \
     device/qcom/msm8226/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
