@@ -75,8 +75,8 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 # Charger
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
 
-#GPS
-BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := false
+# GPS
+TARGET_GPS_HAL_PATH := device/motorola/falcon/gps
 
 # Graphics
 BOARD_EGL_CFG := device/qcom/msm8226/egl.cfg
