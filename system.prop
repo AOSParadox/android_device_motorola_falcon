@@ -84,10 +84,10 @@ ro.opengles.version=196608
 #
 # System props for telephony
 # System prop to turn on CdmaLTEPhone always
-telephony.lteOnCdmaDevice=1
+telephony.lteOnCdmaDevice=0
 
 #System property to turn on hfp client
-bluetooth.hfp.client=1
+bluetooth.hfp.client=1.6
 
 # simulate sdcard on /data/media
 #
@@ -104,7 +104,7 @@ persist.audio.fluence.voicerec=false
 persist.audio.fluence.speaker=true
 
 # Enable/disable cabl
-ro.qualcomm.cabl=1
+ro.qualcomm.cabl=0
 
 # system prop for NFC DT
 ro.nfc.port=I2C
@@ -115,11 +115,14 @@ persist.debug.wfd.enable=1
 persist.sys.wfd.virtual=0
 tunnel.audio.encode = false
 
+#use VERY_HIGH_QUALITY for audio resampler
+af.resampler.quality=4
+
 #Buffer size in kbytes for compress offload playback
 audio.offload.buffer.size.kb=32
 
 #Enable offload audio video playback by default
-av.offload.enable=true
+av.offload.enable=false
 
 #enable voice path for PCM VoIP by default
 use.voice.path.for.pcm.voip=true
@@ -129,10 +132,3 @@ audio.offload.gapless.enabled=true
 
 #property to set minimum frequency as 787Mhz by default
 ro.min_freq_0=787200
-
-#property to restrict number of cameras to 2
-#In L AOSP MAX camera defined as 4, compared to 2 in KK
-#Due to that and multimode architecture, camera on 8x26 target
-#will not work properly on KK as there are non-zero specific profile
-#exists in dtsi file, which is needed fo JB camera.
-persist.camera.num_cameras=2
