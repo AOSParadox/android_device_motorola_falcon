@@ -326,8 +326,7 @@ service subsystem_ramdump /system/bin/subsystem_ramdump 1 0
    class late_start
    group log sdcard_rw sdcard_r diag
 
-on property:persist.sys.qc.sub.rdump.on=*
-   write /sys/module/subsystem_restart/parameters/enable_ramdumps ${persist.sys.qc.sub.rdump.on}
+   write /sys/module/subsystem_restart/parameters/enable_ramdumps 0
 
 service esdpll /system/bin/esdpll -w
     user mot_esdfs
