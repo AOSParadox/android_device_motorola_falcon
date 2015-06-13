@@ -44,12 +44,4 @@ $(INSTALLED_DTIMAGE_TARGET): $(DTBTOOL) $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/u
 		
 endif
 
-# include the non-open-source counterpart to this file
--include vendor/motorola/falcon/AndroidBoardVendor.mk
-
-#Create symbolic links
-$(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/prima; \
-        mkdir -p $(TARGET_OUT_VENDOR)/lib; \
-        rm $(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin; \)
-
 include device/qcom/msm8226/AndroidBoard.mk
