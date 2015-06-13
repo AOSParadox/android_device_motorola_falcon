@@ -29,7 +29,7 @@ define append-dtb
 $(shell mkdir -p $(KERNEL_OUT)/arch/arm/boot;)
 $(foreach d, $(DTB_FILES), \
       $(DTC) -p 1024 -O dtb -o $(call DTB_FILE,$(d)) $(d); \
-      cat $(KERNEL_ZIMG) $(call DTB_FILE,$(d)) > $(call ZIMG_FILE,$(d));))
+      cat $(KERNEL_ZIMG) $(call DTB_FILE,$(d)) > $(call ZIMG_FILE,$(d));)
 endef
 
 ## Build and run dtbtool
@@ -41,7 +41,6 @@ $(INSTALLED_DTIMAGE_TARGET): $(DTBTOOL) $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/u
 	$(call pretty,"Target dt image: $(INSTALLED_DTIMAGE_TARGET)")
 	$(hide) $(DTBTOOL) -o $(INSTALLED_DTIMAGE_TARGET) -s $(BOARD_KERNEL_PAGESIZE) -p $(KERNEL_OUT)/scripts/dtc/ $(KERNEL_OUT)/arch/arm/boot/
 	@echo -e ${CL_CYN}"Made DT image: $@"${CL_RST}
-		
 endif
 
 include device/qcom/msm8226/AndroidBoard.mk
