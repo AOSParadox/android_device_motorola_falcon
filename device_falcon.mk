@@ -25,6 +25,10 @@ $(call inherit-product-if-exists, vendor/motorola/falcon/falcon-vendor.mk)
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
+#CAF Branch
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.par.branch=LA.BF.1.1.2_rb1.22
+
 #WCNSS
 PRODUCT_PACKAGES += \
     WCNSS_qcom_wlan_factory_nv.bin \
