@@ -46,37 +46,6 @@ on init
     chown mot_esdfs root /proc/fs/esdfs/packages
 
 on fs
-    # Mount PDS
-    wait /dev/block/platform/msm_sdcc.1/by-name/pds
-    exec /system/bin/e2fsck -y /dev/block/platform/msm_sdcc.1/by-name/pds
-    exec /system/bin/logwrapper /system/bin/mount_ext4.sh pds /dev/block/platform/msm_sdcc.1/by-name/pds /pds 2048 500 defcontext=u:object_r:pds_file:s0
-    restorecon_recursive /pds
-
-    mkdir /pds/camera 0755 mot_tcmd mot_tcmd
-    mkdir /pds/factory 0755 mot_tcmd mot_tcmd
-    mkdir /pds/public 0755 mot_tcmd mot_tcmd
-    mkdir /pds/public/atvc 0770 mot_atvc shell
-    mkdir /pds/public/battd 0755 mot_accy mot_tcmd
-    mkdir /pds/public/hiddenmenu 0755 radio radio
-    mkdir /pds/public/hiddenmenu/data 0775 system mot_tcmd
-    mkdir /pds/public/locale 0700 system system
-    mkdir /pds/public/omadm 0700 radio radio
-    mkdir /pds/public/svcs 0770 system system
-    mkdir /pds/wifi 0755 mot_tcmd mot_tcmd
-    mkdir /pds/bt 0755 mot_tcmd bluetooth
-    mkdir /pds/wmdrm 0775 mot_drm mot_drm
-    mkdir /pds/security 02770 mot_tpapi mot_tpapi
-    mkdir /pds/batt_health 0755 mot_pwric mot_pwric
-
-    chown mot_tcmd mot_tcmd /pds/factory/fti
-    chmod 0660 /pds/factory/fti
-    chown mot_tcmd mot_tcmd /pds/factory/byte
-    chmod 0660 /pds/factory/byte
-    chmod 0660 /pds/wifi/wlan_mac.bin
-    chown mot_tcmd mot_tcmd /pds/bt/bt_bdaddr
-    chmod 0664 /pds/bt/bt_bdaddr
-    chmod 0600 /pds/whisper/whisper_only/vector0.bin
-
     # Mount modem FSG partition
     wait /dev/block/platform/msm_sdcc.1/by-name/fsg
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/fsg /fsg ro nosuid nodev barrier=0 context=u:object_r:firmware_file:s0
@@ -108,7 +77,9 @@ on post-fs-data
     chown mot_pwric mot_pwric /sys/class/power_supply/battery/device/force_chg_fail_clear
     chown mot_pwric mot_pwric /sys/class/power_supply/battery/device/force_chg_usb_otg_ctl
 
-    # Setup correct permissions for dbvc and atvc
+   # Setup correct permissions for dbvc and atvc
+    mkdir /pds/public/atvc 0770 mot_atvc shell
+    chmod 0770 /pds/public/atvc
     mkdir /data/local/dbvc 0750 mot_tcmd shell
     mkdir /data/local/atvc 0775 mot_tcmd shell
 
@@ -118,6 +89,10 @@ on post-fs-data
 
     # Create moodle directory that MOODLE APP can write to
     mkdir /data/local/moodle 0770 graphics mot_tcmd
+
+    # services directory for activation
+    mkdir /pds/public/svcs 0770 system mot_tcmd
+    chmod 0770 /pds/public/svcs
 
     # Setup folders for diag_mdlog
     mkdir /data/diag_mdlog 0750 system log
@@ -135,6 +110,10 @@ on post-fs-data
     exec /system/bin/chown -L mot_tcmd:system /dev/block/platform/msm_sdcc.1/by-name/utagsBackup
     exec /system/bin/chmod -L 0660 /dev/block/platform/msm_sdcc.1/by-name/utags
     exec /system/bin/chmod -L 0660 /dev/block/platform/msm_sdcc.1/by-name/utagsBackup
+
+    # backup directory for omadm
+    mkdir /pds/public/omadm 0700 radio radio
+    chmod 0700 /pds/public/omadm
 
     # create the necessary data dirs for tpapi with proper permission
     mkdir /dev/tpapi 02770 mot_tpapi mot_tpapi
@@ -320,10 +299,11 @@ service atvc /system/bin/dbvc_atvc_property_set
 #   oneshot
 #   disabled
 
-service subsystem_ramdump /system/bin/subsystem_ramdump 1 0
+service ss_rdump /system/bin/subsystem_ramdump 1 0
    user root
    group root system radio
    class late_start
+   user radio
    group log sdcard_rw sdcard_r diag
 
 on property:persist.sys.qc.sub.rdump.on=*

@@ -73,7 +73,7 @@ TARGET_QCOM_NO_FM_FIRMWARE := true
 EXTENDED_FONT_FOOTPRINT := true
 
 # GPS
-TARGET_GPS_HAL_PATH := device/motorola/falcon/gps
+BOARD_HAVE_NEW_QC_GPS := true
 
 # Graphics
 TARGET_USES_C2D_COMPOSITION := true
@@ -141,7 +141,7 @@ BOARD_SEPOLICY_UNION += \
     rild.te \
     rmt_storage.te \
     system_app.te \
-    subsystem_ramdump.te \
+    ss_rdump.te \
     thermal-engine.te
 
 # Vendor init

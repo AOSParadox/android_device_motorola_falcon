@@ -33,6 +33,11 @@ on early-init
     mkdir /firmware 0771 system system
     symlink /data/tombstones /tombstones
 
+on init
+    loglevel 8
+    # CM: We use our own ril-daemon service definition, see mmi-ril-daemon
+    stop ril-daemon
+
 on fs
     mount_all fstab.qcom
     swapon_all fstab.qcom
@@ -40,10 +45,6 @@ on fs
     # Keeping following partitions outside fstab file. As user may not have
     # these partition flashed on the device. Failure to mount any partition in fstab file
     # results in failure to launch late-start class.
-
-    wait /dev/block/platform/msm_sdcc.1/by-name/cache
-    exec /system/bin/e2fsck -y /dev/block/platform/msm_sdcc.1/by-name/cache
-    exec /system/bin/logwrapper /system/bin/mount_ext4.sh cache /dev/block/platform/msm_sdcc.1/by-name/cache /cache
 
     wait /dev/block/platform/msm_sdcc.1/by-name/persist
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1
@@ -67,6 +68,10 @@ on post-fs-data
 
 on post-fs
     restorecon /data/media /data/media/0 /data/media/legacy /data/media/obb
+    # Mount PDS
+    wait /dev/block/platform/msm_sdcc.1/by-name/pds
+    exec /system/bin/mount_pds.sh
+
 
 on boot
     insmod /system/lib/modules/adsprpc.ko
@@ -79,8 +84,8 @@ on boot
     write /sys/bus/i2c/drivers/ft5x06_ts/5-0038/update_fw 1
 
 #Start the qcom-system-daemon service
-service qcomsysd /system/bin/qcom-system-daemon
-    class main
+#service qcomsysd /system/bin/qcom-system-daemon
+#    class main
 
 #start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
@@ -106,28 +111,12 @@ service mpdecision /system/bin/mpdecision --avg_comp
    disabled
 
 service thermal-engine /system/bin/thermal-engine -c /etc/thermal-engine-8226.conf
-   class main
-   user root
-   socket thermal-send-client stream 0666 system system
-   socket thermal-recv-client stream 0660 system system
-   socket thermal-recv-passive-client stream 0666 system system
-   group root
-
-service qrngd /system/bin/qrngd -f
     class main
     user root
+    socket thermal-send-client stream 0666 system system
+    socket thermal-recv-client stream 0660 system system
+    socket thermal-recv-passive-client stream 0666 system system
     group root
-
-
-service qrngp /system/bin/qrngp
-    class main
-    user root
-    group root
-    oneshot
-    disabled
-
-on property:sys.boot_completed=1
-    start qrngp
 
 service qseecomd /system/bin/qseecomd
     class late_start
@@ -144,31 +133,32 @@ service adsprpcd /system/bin/adsprpcd
    user media
    group media
 
-service imsqmidaemon /system/bin/imsqmidaemon
-    class main
-    user system
-    socket ims_qmid stream 0660 system radio
-    group radio net_raw log qcom_diag
+#service imsqmidaemon /system/bin/imsqmidaemon
+#    class main
+#    user system
+#    socket ims_qmid stream 0660 system radio
+#    group radio net_raw log qcom_diag
+#    disabled
 
-service imsdatadaemon /system/bin/imsdatadaemon
-    class main
-    user system
-    socket ims_datad stream 0660 system radio
-    group system wifi radio inet net_raw log qcom_diag net_admin
-    disabled
+#service imsdatadaemon /system/bin/imsdatadaemon
+#    class main
+#    user system
+#    socket ims_datad stream 0660 system radio
+#    group system wifi radio inet net_raw log qcom_diag net_admin
+#    disabled
 
-on property:sys.ims.QMI_DAEMON_STATUS=1
-    start imsdatadaemon
+#on property:sys.ims.QMI_DAEMON_STATUS=1
+#    start imsdatadaemon
 
-service ims_rtp_daemon /system/bin/ims_rtp_daemon
-   class main
-   user system
-   socket ims_rtpd stream 0660 system radio
-   group radio net_raw diag qcom_diag log
-   disabled
+#service ims_rtp_daemon /system/bin/ims_rtp_daemon
+#   class main
+#   user system
+#   socket ims_rtpd stream 0660 system radio
+#   group radio net_raw diag qcom_diag log
+#   disabled
 
-on property:sys.ims.DATA_DAEMON_STATUS=1
-    start ims_rtp_daemon
+#on property:sys.ims.DATA_DAEMON_STATUS=1
+#    start ims_rtp_daemon
 
 service wcnss-service /system/bin/wcnss_service
    class main
@@ -191,3 +181,11 @@ on property:init.svc.surfaceflinger=running
 
 #service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
 #    class late_start
+
+service mmi-ril-daemon /system/bin/rild
+    class main
+    socket rild stream 660 root radio
+    socket rild-debug stream 660 radio system
+    socket cutback stream 660 media radio
+    user root
+    group radio cache inet misc audio sdcard_rw qcom_oncrpc qcom_diag log net_raw diag

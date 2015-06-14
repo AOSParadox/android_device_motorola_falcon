@@ -1,0 +1,53 @@
+# read the contents of the /dev directory
+allow ss_rdump device:dir r_dir_perms;
+
+# Can write/search in /data/ss-ram-dump
+allow ss_rdump ram_dump_logs:dir create_dir_perms;
+allow ss_rdump ram_dump_logs:file create_file_perms;
+allow ss_rdump ram_dump_logs:dir r_dir_perms;
+allow ss_rdump ram_dump_logs:file r_file_perms;
+allow ss_rdump ram_dump_logs:dir { create search open read write getattr add_name };
+
+#Needed in order to run kickstart
+allow ss_rdump shell:fd { use };
+allow ss_rdump shell_exec:file { read open execute execute_no_trans };
+allow ss_rdump system_file:file execute_no_trans;
+allow ss_rdump ss_rdump_exec:file execute_no_trans;
+
+allow ss_rdump persist_file:dir r_dir_perms;
+
+# change ownership of modem log files
+allow ss_rdump self:capability { fowner chown fsetid };
+
+#Needed to inform the hsic driver that mdm has booted up
+allow ss_rdump sysfs:file { open read write getattr };
+
+#Needed in order to access the firmware partition
+allow ss_rdump firmware_file:dir { search };
+allow ss_rdump firmware_file:file { open read getattr };
+
+#Needed in order to collect ramdumps
+allow ss_rdump tombstone_data_file:file { create read write open getattr };
+allow ss_rdump tombstone_data_file:dir { create search open read write getattr add_name };
+
+userdebug_or_eng(`
+
+  # Create files in /data/
+  allow ss_rdump system_data_file:dir create_dir_perms;
+  allow ss_rdump system_data_file:file create_file_perms;
+  allow ss_rdump system_data_file:dir rw_dir_perms;
+  allow ss_rdump system_data_file:file rw_file_perms;
+
+  # Create files in /data/tombstones, for example
+  # /data/tombstones/ramdump_venus.elf
+  allow ss_rdump tombstone_data_file:dir rw_dir_perms;
+  allow ss_rdump tombstone_data_file:file rw_file_perms;
+
+  # Needed to allow UID=root to access /data/tombstones,
+  # which is owned by UID=system
+  allow ss_rdump self:capability dac_override;
+')
+
+# write radio properties
+unix_socket_connect(ss_rdump, property, init)
+allow ss_rdump radio_prop:property_service set;
