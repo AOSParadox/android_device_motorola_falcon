@@ -4,8 +4,8 @@ allow rild sysfs_usb_supply:dir search;
 allow rild sysfs_usb_supply:file { open read };
 
 # Allow permissions for FSG / PDS
-allow rild fsg_file:dir search;
-allow rild fsg_file:file r_file_perms;
+allow rild firmware_file:dir search;
+allow rild firmware_file:file r_file_perms;
 #allow rild pds_file:dir search;
 #allow rild pds_file:file r_file_perms;
 
