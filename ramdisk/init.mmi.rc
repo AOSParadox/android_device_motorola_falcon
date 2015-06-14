@@ -236,6 +236,16 @@ on boot
     write /sys/bus/msm_subsys/devices/subsys2/restart_level related
     write /sys/bus/msm_subsys/devices/subsys3/restart_level related
 
+    setprop ro.hw.device ${ro.boot.device}
+    setprop ro.hw.hwrev ${ro.boot.hwrev}
+    setprop ro.hw.radio ${ro.boot.radio}
+
+service mmi-radio-sh /system/bin/sh /init.mmi.radio.sh
+    class core
+    user radio
+    group radio
+    oneshot
+
 service mmi-boot-sh /system/bin/sh /init.mmi.boot.sh
     class core
     user root
