@@ -13,7 +13,7 @@
 
 # SSR
 /data/ss-ram-dumps(/.*)?                                    u:object_r:ram_dump_logs:s0
-/system/bin/ss_rdump                               u:object_r:ss_rdump_exec:s0
+/system/bin/ss_rdump                               	    u:object_r:ss_rdump_exec:s0
 
 # Motorola services
 /data/power_supply_logger(/.*)?                             u:object_r:batt_health_data_file:s0
