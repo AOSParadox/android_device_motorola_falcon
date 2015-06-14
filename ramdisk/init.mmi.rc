@@ -240,12 +240,6 @@ on boot
     setprop ro.hw.hwrev ${ro.boot.hwrev}
     setprop ro.hw.radio ${ro.boot.radio}
 
-service mmi-radio-sh /system/bin/sh /init.mmi.radio.sh
-    class core
-    user radio
-    group radio
-    oneshot
-
 service mmi-boot-sh /system/bin/sh /init.mmi.boot.sh
     class core
     user root
