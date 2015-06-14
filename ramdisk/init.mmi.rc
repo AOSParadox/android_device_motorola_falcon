@@ -38,15 +38,18 @@ on init
     chown system system /sys/module/ct406/parameters/als_delay
     chmod 0660 /sys/module/ct406/parameters/als_delay
 
+    # NFC PN544
+    chown nfc nfc /sys/devices/virtual/misc/pn544/pn544_control_dev
+    chmod 0660 /sys/devices/virtual/misc/pn544/pn544_control_dev
+
+    # ESDFS
+    chown mot_esdfs root /proc/fs/esdfs/packages
+
 on fs
     # Mount modem FSG partition
     wait /dev/block/platform/msm_sdcc.1/by-name/fsg
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/fsg /fsg ro nosuid nodev barrier=0 context=u:object_r:firmware_file:s0
 
-    # Backup ramconsole on abnormal reboot.
-    copy /proc/last_kmsg /data/dontpanic/last_kmsg
-    chown root log /data/dontpanic/last_kmsg
-    chmod 0640 /data/dontpanic/last_kmsg
 
     # Set correct permissions for HOB, DHOB
     exec /system/bin/chmod -L 660 /dev/block/platform/msm_sdcc.1/by-name/hob
@@ -65,9 +68,6 @@ on fs
     exec /system/bin/chown -L root:system /dev/block/platform/msm_sdcc.1/by-name/logs
 
 on post-fs-data
-    # Trigger the defuse tool
-    setprop installd.post_fs_data_ready 1
-
     # Permissions for Factory Test of Charging Paths
     chown mot_pwric mot_pwric /sys/class/power_supply/battery/device/force_chg_auto_enable
     chown mot_pwric mot_pwric /sys/class/power_supply/battery/device/force_chg_ibatt
@@ -94,6 +94,14 @@ on post-fs-data
     mkdir /pds/public/svcs 0770 system mot_tcmd
     chmod 0770 /pds/public/svcs
 
+    # Setup folders for diag_mdlog
+    mkdir /data/diag_mdlog 0750 system log
+    mkdir /data/diag_logs 0750 log log
+    mkdir /data/diag_mdlog/logs 0750 log log
+
+    # Setup folder for aplogd
+    mkdir /data/aplogd 0750 log log
+
     # Setup folder for native to transfer data to NativeDropBoxAgent
     mkdir /data/system/dropbox-add 0730 system diag
 
@@ -107,9 +115,17 @@ on post-fs-data
     mkdir /pds/public/omadm 0700 radio radio
     chmod 0700 /pds/public/omadm
 
-    # Subsystem RAM-dumps
+    # create the necessary data dirs for tpapi with proper permission
+    mkdir /dev/tpapi 02770 mot_tpapi mot_tpapi
+    mkdir /data/tpapi 02770 mot_tpapi mot_tpapi
+    mkdir /data/tpapi/etc 02770 mot_tpapi mot_tpapi
+    mkdir /data/tpapi/etc/tpa 02770 mot_tpapi mot_tpapi
+    mkdir /data/tpapi/etc/tpa/persistent 02770 mot_tpapi mot_tpapi
+
+    #Subsystem RAM-dumps
     mkdir /data/ss-ram-dumps 0750 radio log
     mkdir /data/ss-ram-dumps/bp-dumps 0750 radio log
+    mkdir /data/ss-ram-dumps/riva-dumps 0750 radio log
 
     # Create directory for cutback
     mkdir /data/misc/cutback 0770 radio wifi
@@ -128,10 +144,20 @@ on post-fs-data
 
     start batt_health
 
+on post-fs
+    swapon_all fstab.qcom
+    write /proc/sys/vm/page-cluster 0
+
+# To report kernel panic
+service apanic_annotate  /system/bin/sh /system/bin/apanic_annotate.sh build
+    class late_start
+    group log
+    oneshot
 
 service batt_health /system/bin/batt_health
     class main
-    group mot_pwric
+    user mot_pwric
+    group mot_pwric net_admin log
 
 on early-boot
 # Motorola Charge_only_mode
@@ -200,15 +226,8 @@ on boot
 
     # Assign TCP buffer thresholds to be ceiling value of technology maximums
     # Increased technology maximums should be reflected here.
-    write /proc/sys/net/core/rmem_max 8388608
-    write /proc/sys/net/core/wmem_max 8388608
-
-    # create the necessary data dirs for tpapi with proper permission
-    mkdir /dev/tpapi 02770 mot_tpapi mot_tpapi
-    mkdir /data/tpapi 02770 mot_tpapi mot_tpapi
-    mkdir /data/tpapi/etc 02770 mot_tpapi mot_tpapi
-    mkdir /data/tpapi/etc/tpa 02770 mot_tpapi mot_tpapi
-    mkdir /data/tpapi/etc/tpa/persistent 02770 mot_tpapi mot_tpapi
+    write /proc/sys/net/core/rmem_max  8388608
+    write /proc/sys/net/core/wmem_max  8388608
 
     # Force all SSR systems to 'related' so they attempt self-recovery without
     # rebooting the device
@@ -216,6 +235,10 @@ on boot
     write /sys/bus/msm_subsys/devices/subsys1/restart_level related
     write /sys/bus/msm_subsys/devices/subsys2/restart_level related
     write /sys/bus/msm_subsys/devices/subsys3/restart_level related
+
+    setprop ro.hw.device ${ro.boot.device}
+    setprop ro.hw.hwrev ${ro.boot.hwrev}
+    setprop ro.hw.radio ${ro.boot.radio}
 
 service mmi-boot-sh /system/bin/sh /init.mmi.boot.sh
     class core
@@ -245,28 +268,53 @@ service hw_revs /system/bin/hardware_revisions.sh
     group system
     oneshot
 
+service mbm_spy /system/bin/mbm_spy
+    class late_start
+    user system
+    group system
+    oneshot
+
 # DHCP service for Ethernet
 service dhcpcd_eth0 /system/bin/dhcpcd -G
-    class late_start
-    disabled
-    oneshot
+   class late_start
+   disabled
+   oneshot
 
 service iprenew_eth0 /system/bin/dhcpcd -nBK
-    class late_start
-    disabled
-    oneshot
+   class late_start
+   disabled
+   oneshot
 
 service atvc_core /system/bin/dbvc_atvc_property_set
-    class core
-    user mot_atvc
-    group mot_tpapi
-    oneshot
+   class core
+   user mot_atvc
+   group mot_tpapi
+   oneshot
 
 service atvc /system/bin/dbvc_atvc_property_set
-    class late_start
-    user mot_atvc
-    group mot_tpapi
-    oneshot
+   class late_start
+   user mot_atvc
+   group mot_tpapi
+   oneshot
+
+#service qe /xbin/qe /system
+#   class main
+#   seclabel u:r:qe:s0
+#   oneshot
+#   disabled
+
+service ss_rdump /system/bin/subsystem_ramdump 1 0
+   user root
+   group root system radio
+   class late_start
+   user radio
+   group log sdcard_rw sdcard_r diag
+   disabled
 
 on property:persist.sys.qc.sub.rdump.on=*
-    write /sys/module/subsystem_restart/parameters/enable_ramdumps ${persist.sys.qc.sub.rdump.on}
+   write /sys/module/subsystem_restart/parameters/enable_ramdumps ${persist.sys.qc.sub.rdump.on}
+
+service esdpll /system/bin/esdpll -w
+    user mot_esdfs
+    group mot_esdfs package_info
+    disabled

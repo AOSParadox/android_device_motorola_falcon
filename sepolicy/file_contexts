@@ -7,9 +7,13 @@
 /data/cam_socket([0-9])+                                    u:object_r:camera_socket:s0
 
 # CMHW
-/sys/devices/platform/kcal_ctrl.0/kcal                      u:object_r:kcalctrl_sysfs:s0
-/sys/devices/platform/kcal_ctrl.0/kcal_ctrl                 u:object_r:kcalctrl_sysfs:s0
+/sys/devices/platform/kcal_ctrl.0/kcal                      u:object_r:display_sysfs:s0
+/sys/devices/platform/kcal_ctrl.0/kcal_enable               u:object_r:display_sysfs:s0
 /sys/devices/virtual/timed_output/vibrator/vtg_level        u:object_r:vibeamp_sysfs:s0
+
+# SSR
+/data/ss-ram-dumps(/.*)?                                    u:object_r:ram_dump_logs:s0
+/system/bin/ss_rdump                               	    u:object_r:ss_rdump_exec:s0
 
 # Motorola services
 /data/power_supply_logger(/.*)?                             u:object_r:batt_health_data_file:s0

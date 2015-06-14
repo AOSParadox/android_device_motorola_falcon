@@ -15,8 +15,9 @@
 -->
 
 <resources>
+    <!-- Sprint Message Wait Indicator Quirk -->
+    <bool name="sprint_mwi_quirk">true</bool>
 
-    <!-- Flag indicating if the tty is enabled -->
-    <bool name="tty_enabled">true</bool>
-
+    <!-- Show cdma auto network mode in (global) roaming -->
+    <bool name="config_show_cdma" translatable="false">true</bool>
 </resources>

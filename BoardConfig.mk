@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2015 The AOSParadox Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,31 +17,36 @@
 # inherit from common msm8226-common
 -include device/qcom/msm8226/BoardConfig.mk
 
-# Platform
-TARGET_NO_BOOTLOADER := true
-
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno305
-TARGET_BOARD_PLATFORM := msm8226
-TARGET_BOOTLOADER_BOARD_NAME := MSM8226
-
 TARGET_SPECIFIC_HEADER_PATH += device/motorola/falcon/include
 
-# Inline kernel building
-BOARD_KERNEL_SEPARATED_DT := true
-KERNEL_DEFCONFIG := falcon_defconfig
-TARGET_KERNEL_CONFIG := falcon_defconfig
-TARGET_KERNEL_SOURCE := kernel
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 androidboot.bootdevice=msm_sdcc.1 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags androidboot.write_protect=0 androidboot.selinux=permissive
-BOARD_RAMDISK_OFFSET := 0x01000000 
-BOARD_KERNEL_TAGS_OFFSET := 0x00000100
+# Architecture
+TARGET_NO_BOOTLOADER := true
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno305
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := xt1031,xt1032,xt1033,xt1034,falcon_umts,falcon_umtsds,falcon_cdma,falcon_retuaws,falcon,falcon_gpe
 
+# Board
+TARGET_BOARD_INFO_FILE := device/motorola/falcon/board-info.txt
+
 # Audio
 BOARD_USES_ALSA_AUDIO := true
-AUDIO_FEATURE_ENABLED_FM := true
+AUDIO_FEATURE_ENABLED_COMPRESS_CAPTURE := true
+AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := true
+AUDIO_FEATURE_ENABLED_EXTN_FORMATS := true
+AUDIO_FEATURE_ENABLED_EXTN_POST_PROC := true
+AUDIO_FEATURE_ENABLED_FLUENCE := true
+AUDIO_FEATURE_ENABLED_HFP := true
+AUDIO_FEATURE_ENABLED_INCALL_MUSIC := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
+AUDIO_FEATURE_ENABLED_PCM_OFFLOAD := true
+AUDIO_FEATURE_ENABLED_PCM_OFFLOAD_24 := true
+AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
+AUDIO_FEATURE_DISABLED_DS1_DOLBY_DDP := true
+AUDIO_FEATURE_DISABLED_FM := true
+AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
+#BOARD_USES_EXTN_AUDIO_POLICY_MANAGER := true
+#AUDIO_FEATURE_ENABLED_MULTIPLE_TUNNEL := true
 
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/motorola/falcon/bluetooth
@@ -55,21 +60,39 @@ TARGET_SYSTEMIMAGE_USE_SQUISHER := true
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
 
-# Graphics
-#BOARD_EGL_CFG := device/motorola/falcon/prebuilt/system/lib/egl/egl.cfg
-USE_OPENGL_RENDERER := true
-TARGET_USES_C2D_COMPOSITION := true
-TARGET_USES_ION := true
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
-MAX_EGL_CACHE_KEY_SIZE := 12*1024
-MAX_EGL_CACHE_SIZE := 2048*1024
+# Charger
+BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
 
-# Lights
-TARGET_PROVIDES_LIBLIGHT := true
+# Encryption
+TARGET_HW_DISK_ENCRYPTION := true
+
+# FM
+TARGET_QCOM_NO_FM_FIRMWARE := true
+
+# Fonts
+EXTENDED_FONT_FOOTPRINT := true
+
+# GPS
+BOARD_HAVE_NEW_QC_GPS := true
+
+# Graphics
+TARGET_USES_C2D_COMPOSITION := true
+
+# Kernel
+BOARD_KERNEL_SEPARATED_DT := true
+KERNEL_DEFCONFIG := falcon_defconfig
+TARGET_KERNEL_CONFIG := falcon_defconfig
+TARGET_KERNEL_SOURCE := kernel
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=23 msm_rtb.filter=0x37 androidboot.bootdevice=msm_sdcc.1 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags androidboot.write_protect=0
+BOARD_RAMDISK_OFFSET := 0x01000000 
+BOARD_KERNEL_TAGS_OFFSET := 0x00000100
+
 
 # Motorola
 TARGET_USES_MOTOROLA_LOG := true
+
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
 
 # Partition sizes
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00A00000
@@ -88,7 +111,13 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
 
+# Release tools
+TARGET_RELEASETOOLS_EXTENSIONS := device/motorola/falcon
+
 # SELinux
+
+-include device/qcom/sepolicy/sepolicy.mk
+
 BOARD_SEPOLICY_DIRS += \
     device/motorola/falcon/sepolicy
 
@@ -96,6 +125,7 @@ BOARD_SEPOLICY_UNION += \
     akmd8963.te \
     atvc.te \
     batt_health.te \
+    bootanim.te \
     device.te \
     file_contexts \
     file.te \
@@ -111,6 +141,7 @@ BOARD_SEPOLICY_UNION += \
     rild.te \
     rmt_storage.te \
     system_app.te \
+    ss_rdump.te \
     thermal-engine.te
 
 # Vendor init
@@ -122,9 +153,11 @@ TARGET_LIBINIT_DEFINES_FILE := device/motorola/falcon/init/init_falcon.c
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
 BOARD_VOLD_DISC_HAS_MULTIPLE_MAJORS := true
 BOARD_VOLD_MAX_PARTITIONS := 40
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
+BOARD_HAS_QCOM_WLAN_SDK := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_HOSTAPD_DRIVER := NL80211
