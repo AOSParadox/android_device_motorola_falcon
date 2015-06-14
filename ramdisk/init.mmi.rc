@@ -305,6 +305,7 @@ service ss_rdump /system/bin/subsystem_ramdump 1 0
    class late_start
    user radio
    group log sdcard_rw sdcard_r diag
+   disabled
 
 on property:persist.sys.qc.sub.rdump.on=*
    write /sys/module/subsystem_restart/parameters/enable_ramdumps ${persist.sys.qc.sub.rdump.on}
