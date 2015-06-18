@@ -139,7 +139,9 @@ BOARD_SEPOLICY_UNION += \
     rmt_storage.te \
     system_app.te \
     ss_rdump.te \
-    thermal-engine.te
+    system_server.te \
+    thermal-engine.te \
+    vold.te
 
 # Vendor init
 TARGET_UNIFIED_DEVICE := true
