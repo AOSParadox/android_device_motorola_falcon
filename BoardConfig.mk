@@ -63,8 +63,6 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 # Charger
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
 
-# Encryption
-TARGET_HW_DISK_ENCRYPTION := true
 
 # FM
 TARGET_QCOM_NO_FM_FIRMWARE := true
