@@ -17,6 +17,7 @@
 
 
 DEVICE_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
+PRODUCT_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
@@ -27,7 +28,7 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 #CAF Branch
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.par.branch=LA.BF.1.1.2_rb1.22
+    ro.par.branch=LA.BF.1.1.2_rb1.23
 
 #WCNSS
 PRODUCT_PACKAGES += \
@@ -49,7 +50,7 @@ PRODUCT_COPY_FILES += \
 include device/qcom/msm8226/msm8226.mk
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=adb
+    persist.sys.usb.config=mtp,adb
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -79,8 +80,17 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
     qcom.bt.le_dev_pwr_class=1 \
+    ro.bluetooth.dun=false \
     ro.qualcomm.bt.hci_transport=smd \
-    ro.qualcomm.bluetooth.sap=false
+    ro.bluetooth.sap=false \
+    ro.qualcomm.bluetooth.sap=false \
+    ro.qualcomm.bluetooth.ftp=true \
+    ro.qualcomm.bluetooth.hfp=true \
+    ro.qualcomm.bluetooth.hsp=true \
+    ro.qualcomm.bluetooth.map=true \
+    ro.qualcomm.bluetooth.nap=true \
+    ro.qualcomm.bluetooth.opp=true \
+    ro.qualcomm.bluetooth.pbap=true
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1280
@@ -89,7 +99,7 @@ TARGET_SCREEN_WIDTH := 720
 # Display
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.enabletr=0 \
-    ro.sf.lcd_density=320
+    ro.sf.lcd_density=280
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -106,13 +116,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     qemu.hw.mainkeys=0
 
-#HAL
-PRODUCT_PACKAGES += \
-    keystore.qcom
-
 # Keystore
 PRODUCT_PACKAGES += \
-    keystore.msm8226
+    keystore.qcom
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -126,7 +132,8 @@ PRODUCT_COPY_FILES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    power.msm8226
+    power.msm8226 \
+    power.qcom
 
 # Qualcomm
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -138,14 +145,15 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.dfr_mode_set=1 \
-    persist.radio.msgtunnel.start=false \
     persist.radio.no_wait_for_card=1 \
     persist.radio.mode_pref_nv10=1 \
     persist.radio.call_type=1
 
 # Storage
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.isUsbOtgEnabled=true
+    persist.sys.isUsbOtgEnabled=true \
+    persist.fuse_sdcard=true \
+    ro.crypto.fuse_sdcard=true
 
 # USB
 PRODUCT_PACKAGES += \
@@ -164,7 +172,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Wifi
 PRODUCT_PACKAGES += \
     dhcpcd.conf \
-    hostapd_default.conf \
     hostapd \
     wpa_supplicant \
     wpa_supplicant.conf
@@ -172,6 +179,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     p2p_supplicant_overlay.conf \
     wpa_supplicant_overlay.conf
+
+PRODUCT_COPY_FILES += \
+	device/qcom/msm8226/hostapd.conf:system/etc/hostapd/hostapd_default.conf
 
 PRODUCT_PACKAGES += \
     libcurl \
