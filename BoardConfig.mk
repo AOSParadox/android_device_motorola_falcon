@@ -102,7 +102,7 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00A00000
 TARGET_POWERHAL_VARIANT := qcom
 
 # QCOM hardware
-BOARD_USES_QCOM_HARDWARE := true
+BOARD_USES_QCOM_HARDWARE := false
 
 # Recovery
 TARGET_RECOVERY_FSTAB := device/motorola/falcon/ramdisk/fstab.qcom
