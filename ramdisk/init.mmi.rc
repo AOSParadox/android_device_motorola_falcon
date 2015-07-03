@@ -331,6 +331,10 @@ service mmi-touch-sh /system/bin/sh /init.mmi.touch.sh synaptics aps
     user root
     oneshot
 
+service charge_only_mode /system/bin/charge_only_mode
+    user root
+    disabled
+
 on property:ro.secure=0
     # disable dmesg restrict for insecure builds
     write /proc/sys/kernel/dmesg_restrict 0
