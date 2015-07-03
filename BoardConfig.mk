@@ -81,7 +81,6 @@ TARGET_USES_C2D_COMPOSITION := true
 # Kernel
 BOARD_KERNEL_SEPARATED_DT := true
 KERNEL_DEFCONFIG := falcon_defconfig
-TARGET_KERNEL_CONFIG := falcon_defconfig
 TARGET_KERNEL_SOURCE := kernel
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=23 msm_rtb.filter=0x37 androidboot.bootdevice=msm_sdcc.1 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags androidboot.write_protect=0
 BOARD_RAMDISK_OFFSET := 0x01000000 
