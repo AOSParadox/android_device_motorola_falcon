@@ -25,16 +25,32 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+/dev/null                 0666   root       root
+/dev/zero                 0666   root       root
+/dev/full                 0666   root       root
+/dev/ptmx                 0666   root       root
+/dev/tty                  0666   root       root
+/dev/random               0666   root       root
+/dev/urandom              0666   root       root
+
+/dev/ashmem               0666   root       root
+/dev/binder               0666   root       root
+/dev/tspdrv               0666   root       root
+/dev/ttyHSL0		  0660   radio      system
+# logger should be world writable (for logging) but not readable
+/dev/log/*                0666   root       log
+
 # the DIAG device node is not world writable/readable.
 /dev/diag                 0660   system     qcom_diag
-
+/dev/ttydiag0             0660   system     qcom_diag
+/dev/ttydiag1             0660   system     qcom_diag
 /dev/genlock              0666   system     system
 /dev/kgsl                 0666   system     system
 /dev/kgsl-3d0             0666   system     system
 /dev/kgsl-2d0             0666   root       root
 /dev/kgsl-2d1             0666   root       root
 /dev/ion                  0664   system     system
-/dev/rtc0                 0600   system     system
+/dev/rtc0                 0660   system     system
 /dev/smd0                 0660   system     system
 /dev/smd4                 0660   system     system
 /dev/smd_cxm_qmi          0640   radio      radio
@@ -141,9 +157,11 @@
 /dev/msm_preproc_ctl      0660   system     audio
 /dev/msm_rtac             0660   system     audio
 /dev/msm_voicememo        0660   system     audio
-#/dev/radio0               0640   fm_radio   fm_radio
+*/
+/dev/radio0               0640   fm_radio   fm_radio
 /dev/smd3                 0660   bluetooth  net_bt_stack
 /dev/smd2                 0660   bluetooth  net_bt_stack
+
 /dev/ttyHSL1              0660   system     system
 /dev/mdm                  0660   system     radio
 /sys/devices/virtual/smdpkt/smdcntl*       open_timeout   0664 radio radio
@@ -172,13 +190,25 @@
 /sys/devices/virtual/optical_sensors/lightsensor    ls_poll_delay  0660    input    system
 /sys/devices/virtual/input/input*                   poll           0660    input    system
 /sys/devices/virtual/input/input*                   pollrate_ms    0660    input    system
+/sys/devices/virtual/input/input*                   delay          0660    root     input
+/sys/devices/virtual/input/input*                   op_mode        0660    root     input
+/sys/devices/virtual/input/input*                   offset_x       0664    root     input
+/sys/devices/virtual/input/input*                   offset_y       0664    root     input
+/sys/devices/virtual/input/input*                   offset_z       0664    root     input
+/sys/devices/virtual/input/input*                   rept_xy        0664    root     input
+/sys/devices/virtual/input/input*                   rept_z         0664    root     input
+/sys/devices/virtual/input/input*                   bandwidth      0664    root     input
+/sys/devices/virtual/input/input*                   range          0664    root     input
+/sys/devices/virtual/input/input*                   driver/enable  0660    root     input
+/sys/devices/virtual/input/input*                   driver/delay   0660    root     input
 
 # wlan
 /dev/wcnss_wlan           0660   system     system
 /dev/wcnss_ctrl           0660   system     system
+
 #nfc permissions
 /dev/nfc-nci              0660    nfc         nfc
-/dev/assd                 0660    nfc         nfc
+/dev/bcm2079x-i2c         0660  nfc          nfc
 
 # UIO devices
 /dev/uio0                 0660   system     system
@@ -200,6 +230,9 @@
 # ACDB
 /dev/msm_acdb             0660   system     audio
 
+# MOT CAMERA
+/dev/motcamera0           0660   camera     camera
+
 # I2C
 /dev/i2c-0                0660   root       system
 /dev/i2c-1                0660   root       system
@@ -208,6 +241,7 @@
 /dev/i2c-5                0660   root       system
 
 # SECURITY
+/dev/qseecom              0660   system     drmrpc
 /dev/sec                  0660   system     drmrpc
 
 # AK8963 Magnetometer
@@ -220,5 +254,30 @@
 # L3G4200D Gyro
 /dev/l3g4200d             0660   compass    compass
 
+#PN544 NFC
+/dev/pn544                0660   nfc        nfc
+
 # kernel logs
 /dev/log/kernel           0600   root       log
+
+# Moto Sensors
+/dev/stm401               0660  system     compass
+/dev/stm401_as            0660  compass    compass
+/dev/stm401_ms            0660  compass    compass
+
+# Moto Sensors
+/dev/stml0xx               0660  system     compass
+/dev/stml0xx_as            0660  compass    compass
+/dev/stml0xx_ms            0660  compass    compass
+
+# Validity Sensor
+/dev/vfsspi               0660  fingerp    fingerp
+
+# DTV
+/dev/isdbt                0660  system     system
+
+# haptic
+/dev/drv2605              0660  system     system
+
+# FB Quickdraw
+/dev/fb_quickdraw         0660  system     graphics
