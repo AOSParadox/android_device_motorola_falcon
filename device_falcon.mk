@@ -28,7 +28,7 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 #CAF Branch
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.par.branch=LA.BF.1.1.2_rb1.23
+    ro.par.branch=LA.BF.1.1.2_rb1.24
 
 #WCNSS
 PRODUCT_PACKAGES += \
