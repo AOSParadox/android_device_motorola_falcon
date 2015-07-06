@@ -70,15 +70,6 @@ on fs
     exec /system/bin/chmod -L 640 /dev/block/platform/msm_sdcc.1/by-name/logs
     exec /system/bin/chown -L root:system /dev/block/platform/msm_sdcc.1/by-name/logs
 
-on fs-no-emulation
-    mount rootfs rootfs / rw remount
-    rm /sdcard
-    rm /mnt/sdcard
-    rm /storage/sdcard0
-    symlink /storage/sdcard1 /sdcard
-    symlink /storage/sdcard1 /mnt/sdcard
-    mount rootfs rootfs / ro remount
-
 on post-fs-data
     # Permissions for Factory Test of Charging Paths
     chown mot_pwric mot_pwric /sys/class/power_supply/battery/device/force_chg_auto_enable
@@ -94,6 +85,10 @@ on post-fs-data
     chmod 0770 /pds/public/atvc
     mkdir /data/local/dbvc 0750 mot_tcmd shell
     mkdir /data/local/atvc 0775 mot_tcmd shell
+
+    # Wifi
+    restorecon /data/hostapd
+    restorecon /data/misc/wifi/hostapd/wlan0
 
     # Create moodle directory that MOODLE APP can write to
     mkdir /data/local/moodle 0770 graphics mot_tcmd
@@ -150,7 +145,6 @@ on post-fs-data
     start batt_health
 
 on post-fs
-    swapon_all fstab.qcom
     write /proc/sys/vm/page-cluster 0
 
 # To report kernel panic
@@ -331,10 +325,6 @@ service mmi-touch-sh /system/bin/sh /init.mmi.touch.sh synaptics aps
     user root
     oneshot
 
-service charge_only_mode /system/bin/charge_only_mode
-    user root
-    disabled
-
 on property:ro.secure=0
     # disable dmesg restrict for insecure builds
     write /proc/sys/kernel/dmesg_restrict 0
@@ -398,17 +388,3 @@ service esdpll /system/bin/esdpll -w
     user mot_esdfs
     group mot_esdfs package_info
     disabled
-
-on property:ro.esdfs_sdcard=true
-    wait /data/media/0 600
-    mount esdfs /data/media /mnt/shell/emulated derive=legacy
-    mount none /mnt/shell/emulated/0 /storage/emulated/legacy bind
-    start esdpll
-
-# This will make sure that sdcard is bound as late_start.
-on nonencrypted
-    setprop ro.esdfs_sdcard ${persist.esdfs_sdcard}
-
-on property:vold.decrypt=trigger_restart_framework
-    setprop ro.esdfs_sdcard ${persist.esdfs_sdcard}
-    start bootanim
