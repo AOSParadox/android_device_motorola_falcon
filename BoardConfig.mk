@@ -43,9 +43,8 @@ AUDIO_FEATURE_ENABLED_PCM_OFFLOAD := true
 AUDIO_FEATURE_ENABLED_PCM_OFFLOAD_24 := true
 AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
 AUDIO_FEATURE_DISABLED_DS1_DOLBY_DDP := true
-#AUDIO_FEATURE_DISABLED_FM := true
 AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
-BOARD_HAVE_QCOM_FM := true
+AUDIO_FEATURE_DISABLED_FM := true
 
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/motorola/falcon/bluetooth
@@ -61,10 +60,6 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 
 # Charger
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
-
-
-# FM
-TARGET_QCOM_NO_FM_FIRMWARE := true
 
 # Fonts
 EXTENDED_FONT_FOOTPRINT := true
@@ -82,7 +77,6 @@ TARGET_KERNEL_SOURCE := kernel
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=23 msm_rtb.filter=0x37 androidboot.bootdevice=msm_sdcc.1 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags androidboot.write_protect=0
 BOARD_RAMDISK_OFFSET := 0x01000000 
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
-
 
 # Motorola
 TARGET_USES_MOTOROLA_LOG := true

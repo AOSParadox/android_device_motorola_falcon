@@ -59,8 +59,6 @@
 /dev/smd7                 0660   bluetooth  bluetooth
 /dev/ccid_bridge          0660   system     system
 
-/dev/block/platform/msm_sdcc.1/by-name/frp 0600 system system
-
 #permissions for CSVT
 /dev/smd11                0660   radio      radio
 
@@ -161,7 +159,7 @@
 /dev/radio0               0640   fm_radio   fm_radio
 /dev/smd3                 0660   bluetooth  net_bt_stack
 /dev/smd2                 0660   bluetooth  net_bt_stack
-
+/*
 /dev/ttyHSL1              0660   system     system
 /dev/mdm                  0660   system     radio
 /sys/devices/virtual/smdpkt/smdcntl*       open_timeout   0664 radio radio
