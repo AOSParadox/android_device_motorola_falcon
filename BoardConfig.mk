@@ -22,6 +22,7 @@ TARGET_SPECIFIC_HEADER_PATH += device/motorola/falcon/include
 # Architecture
 TARGET_NO_BOOTLOADER := true
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno305
+TARGET_BOARD_PLATFORM := msm8226
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := xt1031,xt1032,xt1033,xt1034,falcon_umts,falcon_umtsds,falcon_cdma,falcon_retuaws,falcon,falcon_gpe
@@ -56,7 +57,10 @@ BLUETOOTH_HCI_USE_MCT := true
 TARGET_SYSTEMIMAGE_USE_SQUISHER := true
 
 # Camera
+#TARGET_PROVIDES_CAMERA_HAL := true
 USE_DEVICE_SPECIFIC_CAMERA := true
+#TARGET_USE_VENDOR_CAMERA_EXT := true
+#USE_CAMERA_STUB := false
 
 # Charger
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
@@ -65,7 +69,10 @@ BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
 EXTENDED_FONT_FOOTPRINT := true
 
 # GPS
-BOARD_HAVE_NEW_QC_GPS := true
+TARGET_GPS_HAL_PATH := device/motorola/falcon/gps
+TARGET_PROVIDES_GPS_LOC_API := true
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := $(TARGET_BOARD_PLATFORM)
+TARGET_NO_RPC := true
 
 # Graphics
 TARGET_USES_C2D_COMPOSITION := true
