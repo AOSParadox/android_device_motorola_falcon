@@ -50,7 +50,7 @@ PRODUCT_COPY_FILES += \
 include device/qcom/msm8226/msm8226.mk
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp,adb
+    persist.sys.usb.config=mtp
 
 # Audio
 PRODUCT_PACKAGES += \
