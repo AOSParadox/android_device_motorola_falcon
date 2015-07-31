@@ -102,6 +102,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=280
 
 # GPS
+PRODUCT_COPY_FILES += \
+    device/motorola/falcon/gps/etc/gps.conf:system/etc/gps.conf \
+    device/motorola/falcon/gps/etc/flp.conf:system/etc/flp.conf \
+    device/motorola/falcon/gps/etc/izat.conf:system/etc/izat.conf \
+    device/motorola/falcon/gps/etc/sap.conf:system/etc/sap.conf \
+    device/motorola/falcon/gps/etc/xtra_root_cert.pem:system/etc/xtra_root_cert.pem \
+    device/motorola/falcon/gps/etc/xtwifi.conf:system/etc/xtwifi.conf
+
 PRODUCT_PACKAGES += \
     gps.msm8226
 
