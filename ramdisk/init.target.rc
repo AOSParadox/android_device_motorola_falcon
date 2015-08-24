@@ -39,7 +39,6 @@ on init
 
 on fs
     mount_all fstab.qcom
-    swapon_all fstab.qcom
 
     # Keeping following partitions outside fstab file. As user may not have
     # these partition flashed on the device. Failure to mount any partition in fstab file
@@ -63,11 +62,6 @@ on fs
 on post-fs-data
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
-
-on post-fs
-    # Mount PDS
-    wait /dev/block/platform/msm_sdcc.1/by-name/pds
-    exec /system/bin/mount_pds.sh
 
 
 on boot

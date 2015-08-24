@@ -57,7 +57,8 @@
 /dev/smd5                 0660   system     system
 /dev/smd6                 0660   system     system
 /dev/smd7                 0660   bluetooth  bluetooth
-/dev/ccid_bridge          0660   system     system
+
+/dev/block/platform/msm_sdcc.1/by-name/frp 0600 system system
 
 #permissions for CSVT
 /dev/smd11                0660   radio      radio
@@ -129,7 +130,7 @@
 /dev/msm_vidc_enc         0660   system     audio
 /dev/msm_rotator          0660   system     system
 /dev/hw_random            0600   root       root
-/dev/adsprpc-smd          0664   system     system
+/dev/adsprpc-smd          0660   media      camera
 
 #permissions for audio
 /dev/msm_qcelp            0660   system     audio
@@ -155,17 +156,16 @@
 /dev/msm_preproc_ctl      0660   system     audio
 /dev/msm_rtac             0660   system     audio
 /dev/msm_voicememo        0660   system     audio
-#/dev/radio0               0640   fm_radio   fm_radio
+/dev/radio0               0640   fm_radio   fm_radio
 /dev/smd3                 0660   bluetooth  net_bt_stack
 /dev/smd2                 0660   bluetooth  net_bt_stack
-/*
 /dev/ttyHSL1              0660   system     system
 /dev/mdm                  0660   system     radio
 /sys/devices/virtual/smdpkt/smdcntl*       open_timeout   0664 radio radio
 /dev/sdio_tty_ciq_00      0660   system     system
 /dev/tty_sdio_00          0660   system     system
 /dev/ttyGS0               0660   system     system
-/dev/i2c-5                0660   media       media
+/dev/i2c-5                0660   media      media
 /dev/voice_svc            0660   system     audio
 
 # DVB devices
@@ -261,6 +261,9 @@
 /dev/stm401               0660  system     compass
 /dev/stm401_as            0660  compass    compass
 /dev/stm401_ms            0660  compass    compass
+/sys/devices/virtual/stm401/stm401_as* timestamp_time_ns    0440 compass compass
+/sys/devices/virtual/stm401/stm401_as* rv_6axis_update_rate 0660 compass compass
+/sys/devices/virtual/stm401/stm401_as* rv_9axis_update_rate 0660 compass compass
 
 # Moto Sensors
 /dev/stml0xx               0660  system     compass

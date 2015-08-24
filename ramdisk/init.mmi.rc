@@ -12,6 +12,9 @@ on early-init
     # Create modem FSG mount point
     mkdir /fsg 755 root root
 
+    # boot with max freq, will be reset in post_boot script
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 1190400
+
 on init
     copy /module_hashes /sys/kernel/module_whitelist
 
@@ -50,6 +53,37 @@ on init
     chown mot_esdfs root /proc/fs/esdfs/packages
 
 on fs
+    # Mount PDS
+    wait /dev/block/platform/msm_sdcc.1/by-name/pds
+    exec /system/bin/e2fsck -y /dev/block/platform/msm_sdcc.1/by-name/pds
+    exec /system/bin/logwrapper /system/bin/mount_ext4.sh pds /dev/block/platform/msm_sdcc.1/by-name/pds /pds 2048 500 defcontext=u:object_r:pds_file:s0
+    restorecon_recursive /pds
+
+    mkdir /pds/camera 0755 mot_tcmd mot_tcmd
+    mkdir /pds/factory 0755 mot_tcmd mot_tcmd
+    mkdir /pds/public 0755 mot_tcmd mot_tcmd
+    mkdir /pds/public/atvc 0770 mot_atvc shell
+    mkdir /pds/public/battd 0755 mot_accy mot_tcmd
+    mkdir /pds/public/hiddenmenu 0755 radio radio
+    mkdir /pds/public/hiddenmenu/data 0775 system mot_tcmd
+    mkdir /pds/public/locale 0700 system system
+    mkdir /pds/public/omadm 0700 radio radio
+    mkdir /pds/public/svcs 0770 system system
+    mkdir /pds/wifi 0755 mot_tcmd mot_tcmd
+    mkdir /pds/bt 0755 mot_tcmd bluetooth
+    mkdir /pds/wmdrm 0775 mot_drm mot_drm
+    mkdir /pds/security 02770 mot_tpapi mot_tpapi
+    mkdir /pds/batt_health 0755 mot_pwric mot_pwric
+
+    chown mot_tcmd mot_tcmd /pds/factory/fti
+    chmod 0660 /pds/factory/fti
+    chown mot_tcmd mot_tcmd /pds/factory/byte
+    chmod 0660 /pds/factory/byte
+    chmod 0660 /pds/wifi/wlan_mac.bin
+    chown mot_tcmd mot_tcmd /pds/bt/bt_bdaddr
+    chmod 0664 /pds/bt/bt_bdaddr
+    chmod 0600 /pds/whisper/whisper_only/vector0.bin
+
     # Mount modem FSG partition
     wait /dev/block/platform/msm_sdcc.1/by-name/fsg
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/fsg /fsg ro nosuid nodev barrier=0 context=u:object_r:firmware_file:s0
@@ -84,8 +118,6 @@ on post-fs-data
     chown mot_pwric mot_pwric /sys/class/power_supply/battery/device/force_chg_usb_otg_ctl
 
     # Setup correct permissions for dbvc and atvc
-    mkdir /pds/public/atvc 0770 mot_atvc shell
-    chmod 0770 /pds/public/atvc
     mkdir /data/local/dbvc 0750 mot_tcmd shell
     mkdir /data/local/atvc 0775 mot_tcmd shell
 
@@ -96,10 +128,6 @@ on post-fs-data
     # Create moodle directory that MOODLE APP can write to
     mkdir /data/local/moodle 0770 graphics mot_tcmd
 
-    # services directory for activation
-    mkdir /pds/public/svcs 0770 system mot_tcmd
-    chmod 0770 /pds/public/svcs
-
     # Setup folders for diag_mdlog
     mkdir /data/diag_mdlog 0750 system log
     mkdir /data/diag_logs 0750 log log
@@ -107,6 +135,10 @@ on post-fs-data
 
     # Setup folder for aplogd
     mkdir /data/aplogd 0750 log log
+
+    #setup folder for WLAN WAPI
+    mkdir /data/wapi_certificate 0750 system wifi
+    chown system wifi /data/wapi_certificate
 
     # Setup folder for native to transfer data to NativeDropBoxAgent
     mkdir /data/system/dropbox-add 0730 system diag
@@ -148,7 +180,9 @@ on post-fs-data
     start batt_health
 
 on post-fs
+    swapon_all fstab.qcom
     write /proc/sys/vm/page-cluster 0
+    write /proc/sys/vm/swappiness 100
 
 # To report kernel panic
 service apanic_annotate  /system/bin/sh /system/bin/apanic_annotate.sh build
@@ -299,6 +333,12 @@ on property:persist.sys.diag_mdlog.on=1
     start diag_mdlog
 
 on property:persist.sys.diag_mdlog.on=0
+    stop diag_mdlog
+
+on property:log.diag_mdlog.invld_mode_stop=1
+    stop diag_mdlog
+
+on property:persist.radio.usbdiag=1
     stop diag_mdlog
 
 service diag_mdlog /system/bin/diag_mdlog-wrap
