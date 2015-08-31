@@ -85,6 +85,7 @@ debug.composition.type=c2d
 persist.hwc.mdpcomp.enable=true
 debug.mdpcomp.logs=0
 dalvik.vm.heapsize=36m
+dalvik.vm.dex2oat-flags=--no-watch-dog
 dev.pm.dyn_samplingrate=1
 
 persist.demo.hdmirotationlock=false
