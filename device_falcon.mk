@@ -28,7 +28,7 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 #CAF Branch
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.par.branch=LA.BF.1.1.2_rb1.24
+    ro.par.branch=LA.BF.1.1.1_C5
 
 #WCNSS
 PRODUCT_PACKAGES += \
@@ -57,13 +57,6 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    audio.offload.24bit.enable=false \
-    audio.offload.multiple.enabled=false
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    av.streaming.offload.enable=false
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.audio.calfile0=/etc/Bluetooth_cal.acdb \
