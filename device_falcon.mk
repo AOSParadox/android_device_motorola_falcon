@@ -57,42 +57,9 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.audio.calfile0=/etc/Bluetooth_cal.acdb \
-    persist.audio.calfile1=/etc/General_cal.acdb \
-    persist.audio.calfile2=/etc/Global_cal.acdb \
-    persist.audio.calfile3=/etc/Handset_cal.acdb \
-    persist.audio.calfile4=/etc/Hdmi_cal.acdb \
-    persist.audio.calfile5=/etc/Headset_cal.acdb \
-    persist.audio.calfile6=/etc/Speaker_cal.acdb
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.audio.fm_max_volume=4096
-
-# Bluetooth
-PRODUCT_PROPERTY_OVERRIDES += \
-    qcom.bt.le_dev_pwr_class=1 \
-    ro.bluetooth.dun=false \
-    ro.qualcomm.bt.hci_transport=smd \
-    ro.bluetooth.sap=false \
-    ro.qualcomm.bluetooth.sap=false \
-    ro.qualcomm.bluetooth.ftp=true \
-    ro.qualcomm.bluetooth.hfp=true \
-    ro.qualcomm.bluetooth.hsp=true \
-    ro.qualcomm.bluetooth.map=true \
-    ro.qualcomm.bluetooth.nap=true \
-    ro.qualcomm.bluetooth.opp=true \
-    ro.qualcomm.bluetooth.pbap=true
-
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1280
 TARGET_SCREEN_WIDTH := 720
-
-# Display
-PRODUCT_PROPERTY_OVERRIDES += \
-    debug.enabletr=0 \
-    ro.sf.lcd_density=280
 
 # GPS
 PRODUCT_COPY_FILES += \
@@ -106,13 +73,6 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     gps.msm8226
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.gps.agps_provider=1 \
-    ro.qc.sdk.izat.premium_enabled=1 \
-    ro.qc.sdk.izat.service_mask=0x5 \
-    persist.gps.qc_nlp_in_use=1 \
-    persist.loc.nlp_name=com.qualcomm.services.location
 
 # Hardware
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -137,39 +97,9 @@ PRODUCT_PACKAGES += \
     power.msm8226 \
     power.qcom
 
-# Qualcomm
-PRODUCT_PROPERTY_OVERRIDES += \
-    com.qc.hardware=true \
-    ro.qualcomm.cabl=0 \
-    ro.vendor.extension_library=/system/vendor/lib/libqc-opt.so
-
-# Radio
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.radio.apm_sim_not_pwdn=1 \
-    persist.radio.dfr_mode_set=1 \
-    persist.radio.no_wait_for_card=1 \
-    persist.radio.mode_pref_nv10=1 \
-    persist.radio.call_type=1
-
-# Storage
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.isUsbOtgEnabled=true \
-    persist.fuse_sdcard=true \
-    ro.crypto.fuse_sdcard=true
-
 # USB
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.usb.mtp=0x2e82 \
-    ro.usb.mtp_adb=0x2e76 \
-    ro.usb.ptp=0x2e83 \
-    ro.usb.ptp_adb=0x2e84 \
-    ro.usb.bpt=0x2e28 \
-    ro.usb.bpt_adb=0x2e29 \
-    ro.usb.bpteth=0x2e2a \
-    ro.usb.bpteth_adb=0x2e2b
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -190,9 +120,3 @@ PRODUCT_PACKAGES += \
     libqsap_sdk \
     libQWiFiSoftApCfg \
     wcnss_service
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.qc.sub.rdump.on=1 \
-    persist.sys.ssr.restart_level=3 \
-    persist.sys.qc.sub.rdump.max=0 \
-    wifi.interface=wlan0
