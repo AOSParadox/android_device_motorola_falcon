@@ -44,7 +44,6 @@ AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
 AUDIO_FEATURE_PCM_IOCTL_ENABLED := true
 AUDIO_FEATURE_ENABLED_PCM_OFFLOAD := true
-# AUDIO_FEATURE_ENABLED_FM := true
 TARGET_USES_QCOM_MM_AUDIO := true
 
 # Bluetooth
@@ -57,12 +56,9 @@ BLUETOOTH_HCI_USE_MCT := true
 TARGET_SYSTEMIMAGE_USE_SQUISHER := true
 
 # Camera
-#TARGET_PROVIDES_CAMERA_HAL := true
 USE_DEVICE_SPECIFIC_CAMERA := true
-#TARGET_USE_VENDOR_CAMERA_EXT := true
-#USE_CAMERA_STUB := false
 
-# Charger
+# Charger - needs https://github.com/CyanogenMod/android_system_core/commit/ae5579561ae04b74752fe4bc7e4741578287e523
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
 
 # Fonts
@@ -70,8 +66,6 @@ EXTENDED_FONT_FOOTPRINT := true
 
 # GPS
 TARGET_NO_RPC := true
-TARGET_GPS_HAL_PATH := device/motorola/falcon/gps
-TARGET_PROVIDES_GPS_LOC_API := true
 
 # Graphics
 TARGET_USES_C2D_COMPOSITION := true
@@ -80,7 +74,7 @@ TARGET_USES_C2D_COMPOSITION := true
 BOARD_KERNEL_SEPARATED_DT := true
 KERNEL_DEFCONFIG := falcon_defconfig
 TARGET_KERNEL_SOURCE := kernel
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=23 msm_rtb.filter=0x37 androidboot.bootdevice=msm_sdcc.1 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags movablecore=160M
 BOARD_RAMDISK_OFFSET := 0x01000000 
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 
@@ -93,9 +87,6 @@ TARGET_PROVIDES_LIBLIGHT := true
 # Partition sizes
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00A00000
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00A00000
-
-# Power
-TARGET_POWERHAL_VARIANT := qcom
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := false
@@ -111,7 +102,6 @@ COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
 TARGET_RELEASETOOLS_EXTENSIONS := device/motorola/falcon
 
 # SELinux
-
 -include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += \

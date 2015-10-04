@@ -11,7 +11,7 @@
 /dev/block/platform/msm_sdcc.1/by-name/persist      /persist     ext4    defaults                                                                       wait,check
 /dev/block/platform/msm_sdcc.1/by-name/boot         /boot        emmc    defaults                                                                       recoveryonly
 /dev/block/platform/msm_sdcc.1/by-name/recovery     /recovery    emmc    defaults                                                                       recoveryonly
-/dev/block/bootdevice/by-name/config                /frp         emmc    defaults                                                                       defaults
+/dev/block/platform/msm_sdcc.1/by-name/frp          /frp         emmc    defaults                                                                       defaults
 
 /devices/platform/msm_hsusb_host                    auto         auto    defaults                                                                       voldmanaged=usbdisk:auto
 /dev/block/zram0                                    none         swap    defaults                                                                       zramsize=268435456

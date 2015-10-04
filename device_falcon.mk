@@ -14,8 +14,6 @@
 # limitations under the License.
 #
 
-
-
 DEVICE_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
 PRODUCT_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
 
@@ -26,15 +24,11 @@ $(call inherit-product-if-exists, vendor/motorola/falcon/falcon-vendor.mk)
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
-#CAF Branch
+# CAF Branch
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.par.branch=LA.BF.1.1.1_C5
+    ro.par.branch=LA.BF.1.1.1_c5
 
-#WCNSS
-PRODUCT_PACKAGES += \
-    WCNSS_qcom_wlan_factory_nv.bin \
-    WCNSS_qcom_cfg.ini
-
+# WCNSS
 PRODUCT_COPY_FILES += \
     device/qcom/msm8226/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
@@ -46,7 +40,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,device/motorola/falcon/prebuilt/system,system)
 
-#Call CodeAurora MSM8226 Tree
+# CodeAurora MSM8226 Tree
 include device/qcom/msm8226/msm8226.mk
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -57,9 +51,21 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing
-# Boot animation
-TARGET_SCREEN_HEIGHT := 1280
-TARGET_SCREEN_WIDTH := 720
+
+# Dalvik
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.heapstartsize=8m \
+    dalvik.vm.heapgrowthlimit=96m \
+    dalvik.vm.heapsize=256m \
+    dalvik.vm.heaptargetutilization=0.75 \
+    dalvik.vm.heapminfree=2m \
+    dalvik.vm.heapmaxfree=8m \
+    dalvik.vm.image-dex2oat-filter=everything \
+    dalvik.vm.dex2oat-filter=everything
+
+# FRP
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.frp.pst=/dev/block/platform/msm_sdcc.1/by-name/frp
 
 # GPS
 PRODUCT_COPY_FILES += \
@@ -86,12 +92,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     lights.msm8226
 
-# Media codecs
-PRODUCT_COPY_FILES += \
-    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
-
 # Power
 PRODUCT_PACKAGES += \
     power.msm8226 \
@@ -107,19 +107,6 @@ PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
 
 # Wifi
-PRODUCT_PACKAGES += \
-    dhcpcd.conf \
-    hostapd \
-    wpa_supplicant \
-    wpa_supplicant.conf
-
-PRODUCT_PACKAGES += \
-    p2p_supplicant_overlay.conf \
-    wpa_supplicant_overlay.conf
-
-PRODUCT_COPY_FILES += \
-	device/qcom/msm8226/hostapd.conf:system/etc/hostapd/hostapd_default.conf
-
 PRODUCT_PACKAGES += \
     libcurl \
     libqsap_sdk \

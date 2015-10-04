@@ -149,10 +149,6 @@ on post-fs-data
     exec /system/bin/chmod -L 0660 /dev/block/platform/msm_sdcc.1/by-name/utags
     exec /system/bin/chmod -L 0660 /dev/block/platform/msm_sdcc.1/by-name/utagsBackup
 
-    # backup directory for omadm
-    mkdir /pds/public/omadm 0700 radio radio
-    chmod 0700 /pds/public/omadm
-
     # create the necessary data dirs for tpapi with proper permission
     mkdir /dev/tpapi 02770 mot_tpapi mot_tpapi
     mkdir /data/tpapi 02770 mot_tpapi mot_tpapi
