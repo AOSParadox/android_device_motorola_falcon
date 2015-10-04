@@ -97,6 +97,11 @@ PRODUCT_PACKAGES += \
     power.msm8226 \
     power.qcom
 
+# TimeKeep
+PRODUCT_PACKAGES += \
+    timekeep \
+    TimeKeep
+
 # USB
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory

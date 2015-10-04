@@ -91,10 +91,11 @@ on property:persist.usb.chgdisabled=1
 on property:persist.usb.chgdisabled=0
    write /sys/class/power_supply/battery/charging_enabled 1
 
-service time_daemon /system/bin/time_daemon
+service timekeep /system/bin/timekeep restore
    class late_start
    user root
    group root
+   oneshot
 
 service mpdecision /system/bin/mpdecision --avg_comp
    class main

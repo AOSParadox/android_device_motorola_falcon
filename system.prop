@@ -116,7 +116,7 @@ ro.use_data_netmgrd=true
 persist.data.netmgrd.qos.enable=true
 
 #system props for time-services
-persist.timed.enable=true
+#persist.timed.enable=true
 
 #
 # system prop for opengles version
