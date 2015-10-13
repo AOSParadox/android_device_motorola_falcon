@@ -110,9 +110,9 @@ BOARD_SEPOLICY_DIRS += \
     device/motorola/falcon/sepolicy
 
 # Vendor init
-#TARGET_UNIFIED_DEVICE := true
-#TARGET_INIT_VENDOR_LIB := libinit_msm
-#TARGET_LIBINIT_DEFINES_FILE := device/motorola/falcon/init/init_falcon.c
+TARGET_INIT_VENDOR_LIB := libinit_msm
+TARGET_LIBINIT_DEFINES_FILE := $(DEVICE_PATH)/init/init_falcon.cpp
+TARGET_UNIFIED_DEVICE := true
 
 # Vold
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
