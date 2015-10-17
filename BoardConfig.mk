@@ -57,6 +57,7 @@ TARGET_SYSTEMIMAGE_USE_SQUISHER := true
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
+TARGET_USE_VENDOR_CAMERA_EXT := true
 
 # Charger - needs https://github.com/CyanogenMod/android_system_core/commit/ae5579561ae04b74752fe4bc7e4741578287e523
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
