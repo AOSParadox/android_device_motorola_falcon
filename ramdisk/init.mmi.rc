@@ -180,6 +180,9 @@ on post-fs
     write /proc/sys/vm/page-cluster 0
     write /proc/sys/vm/swappiness 100
 
+    # Symbols required for motorola blobs
+    export LD_PRELOAD /system/lib/libmoto-log.so
+
 # To report kernel panic
 service apanic_annotate  /system/bin/sh /system/bin/apanic_annotate.sh build
     class late_start
@@ -324,6 +327,12 @@ service aplogd /system/bin/aplogd
     # to log plus those groups after preserving CAP_SYS_ADMIN, which is required
     # for kernel logging.
     disabled
+
+service mmi-radio-sh /system/bin/sh /init.mmi.radio.sh
+    class core
+    user root
+    group radio
+    oneshot
 
 on property:persist.sys.diag_mdlog.on=1
     start diag_mdlog

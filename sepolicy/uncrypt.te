@@ -1,3 +1,0 @@
-# Access userdata block device.
-allow uncrypt userdata_block_device:blk_file rw_file_perms;
-auditallow uncrypt userdata_block_device:blk_file rw_file_perms;

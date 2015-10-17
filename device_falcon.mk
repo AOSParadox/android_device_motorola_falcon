@@ -28,6 +28,10 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.par.branch=LA.BF.1.1.1_c5
 
+# Hadware QCOM
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.hardware=qcom
+
 # WCNSS
 PRODUCT_COPY_FILES += \
     device/qcom/msm8226/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
@@ -68,14 +72,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.frp.pst=/dev/block/platform/msm_sdcc.1/by-name/frp
 
 # GPS
-PRODUCT_COPY_FILES += \
-    device/motorola/falcon/gps/etc/gps.conf:system/etc/gps.conf \
-    device/motorola/falcon/gps/etc/flp.conf:system/etc/flp.conf \
-    device/motorola/falcon/gps/etc/izat.conf:system/etc/izat.conf \
-    device/motorola/falcon/gps/etc/sap.conf:system/etc/sap.conf \
-    device/motorola/falcon/gps/etc/quipc.conf:system/etc/quipc.conf \
-    device/motorola/falcon/gps/etc/xtra_root_cert.pem:system/etc/xtra_root_cert.pem \
-    device/motorola/falcon/gps/etc/xtwifi.conf:system/etc/xtwifi.conf
+#PRODUCT_COPY_FILES += \
+#    device/motorola/falcon/gps/etc/gps.conf:system/etc/gps.conf \
+#    device/motorola/falcon/gps/etc/flp.conf:system/etc/flp.conf \
+#    device/motorola/falcon/gps/etc/izat.conf:system/etc/izat.conf \
+#    device/motorola/falcon/gps/etc/sap.conf:system/etc/sap.conf \
+#    device/motorola/falcon/gps/etc/quipc.conf:system/etc/quipc.conf \
+#    device/motorola/falcon/gps/etc/xtra_root_cert.pem:system/etc/xtra_root_cert.pem \
+#    device/motorola/falcon/gps/etc/xtwifi.conf:system/etc/xtwifi.conf
 
 PRODUCT_PACKAGES += \
     gps.msm8226
@@ -91,6 +95,10 @@ PRODUCT_PACKAGES += \
 # Lights
 PRODUCT_PACKAGES += \
     lights.msm8226
+
+# Motorola
+PRODUCT_PACKAGES += \
+    libmoto-log
 
 # Power
 PRODUCT_PACKAGES += \

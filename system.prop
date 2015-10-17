@@ -40,6 +40,8 @@ ro.qc.sdk.izat.service_mask=0x0
 persist.gps.qc_nlp_in_use=0
 ro.gps.agps_provider=1
 persist.sys.isUsbOtgEnabled=true
+ro.build.fingerprint=motorola/falcon_retuglb/falcon_umts:5.0.2/LXB22.99-36/35:user/release-keys
+ro.product.device=falcon_umts
 
 #
 # system.prop for msm8226
@@ -210,7 +212,7 @@ audio.offload.disable=0
 audio.offload.buffer.size.kb=32
 
 #Enable offload audio video playback by default
-av.offload.enable=false
+audio.offload.video=false
 
 #enable voice path for PCM VoIP by default
 use.voice.path.for.pcm.voip=true

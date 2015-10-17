@@ -39,7 +39,7 @@ AUDIO_FEATURE_ENABLED_EXTN_POST_PROC := true
 AUDIO_FEATURE_ENABLED_FLUENCE := true
 AUDIO_FEATURE_ENABLED_HFP := true
 AUDIO_FEATURE_ENABLED_HWDEP_CAL := false
-AUDIO_FEATURE_ENABLED_INCALL_MUSIC := true
+#AUDIO_FEATURE_ENABLED_INCALL_MUSIC := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
 AUDIO_FEATURE_PCM_IOCTL_ENABLED := true
@@ -66,6 +66,7 @@ EXTENDED_FONT_FOOTPRINT := true
 
 # GPS
 TARGET_NO_RPC := true
+BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := true
 
 # Graphics
 TARGET_USES_C2D_COMPOSITION := true
@@ -74,7 +75,7 @@ TARGET_USES_C2D_COMPOSITION := true
 BOARD_KERNEL_SEPARATED_DT := true
 KERNEL_DEFCONFIG := falcon_defconfig
 TARGET_KERNEL_SOURCE := kernel
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags movablecore=160M
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags movablecore=160M androidboot.selinux=permissive
 BOARD_RAMDISK_OFFSET := 0x01000000 
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 
@@ -107,36 +108,10 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/motorola/falcon
 BOARD_SEPOLICY_DIRS += \
     device/motorola/falcon/sepolicy
 
-BOARD_SEPOLICY_UNION += \
-    akmd8963.te \
-    atvc.te \
-    batt_health.te \
-    bootanim.te \
-    device.te \
-    file_contexts \
-    file.te \
-    init.te \
-    init_shell.te \
-    keystore.te \
-    mediaserver.te \
-    mm-qcamerad.te \
-    mpdecision.te \
-    platform_app.te \
-    property_contexts \
-    property.te \
-    rild.te \
-    rmt_storage.te \
-    system_app.te \
-    ss_rdump.te \
-    system_server.te \
-    thermal-engine.te \
-    uncrypt.te \
-    vold.te
-
 # Vendor init
-TARGET_UNIFIED_DEVICE := true
-TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_LIBINIT_DEFINES_FILE := device/motorola/falcon/init/init_falcon.c
+#TARGET_UNIFIED_DEVICE := true
+#TARGET_INIT_VENDOR_LIB := libinit_msm
+#TARGET_LIBINIT_DEFINES_FILE := device/motorola/falcon/init/init_falcon.c
 
 # Vold
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
