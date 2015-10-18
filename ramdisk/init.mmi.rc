@@ -181,7 +181,7 @@ on post-fs
     write /proc/sys/vm/swappiness 100
 
     # Symbols required for motorola blobs
-    export LD_PRELOAD "/system/lib/libmoto-log.so /system/vendor/lib/libsysutils_local.so"
+    export LD_PRELOAD "/system/lib/libmoto.so /system/vendor/lib/libsysutils_local.so"
 
 # To report kernel panic
 service apanic_annotate  /system/bin/sh /system/bin/apanic_annotate.sh build

@@ -303,4 +303,8 @@
     <string name="config_networkLocationProviderPackageName" translatable="false">com.qualcomm.location</string>
     <string name="config_fusedLocationProviderPackageName" translatable="false">com.qualcomm.location</string>
 
+    <!-- If true, the screen can be rotated via the accelerometer in all 4
+        rotations as the default behavior. -->
+    <bool name="config_allowAllRotations">true</bool>
+
 </resources>
