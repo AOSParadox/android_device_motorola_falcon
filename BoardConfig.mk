@@ -111,7 +111,7 @@ BOARD_SEPOLICY_DIRS += \
 
 # Vendor init
 TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_LIBINIT_DEFINES_FILE := $(DEVICE_PATH)/init/init_falcon.cpp
+TARGET_LIBINIT_DEFINES_FILE := device/motorola/falcon/init/init_falcon.cpp
 TARGET_UNIFIED_DEVICE := true
 
 # Vold
