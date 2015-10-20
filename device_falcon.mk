@@ -98,7 +98,7 @@ PRODUCT_PACKAGES += \
 
 # Motorola
 PRODUCT_PACKAGES += \
-    libmoto-log
+    libmoto
 
 # Power
 PRODUCT_PACKAGES += \
