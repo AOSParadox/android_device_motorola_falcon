@@ -89,3 +89,15 @@ PRODUCT_PACKAGES += \
     libqsap_sdk \
     libQWiFiSoftApCfg \
     wcnss_service
+
+# WCNSS
+PRODUCT_COPY_FILES += \
+    device/motorola/falcon/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    device/motorola/falcon/wifi/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini \
+    device/motorola/falcon/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+
+PRODUCT_PACKAGES += \
+    wcnss_service \
+    WCNSS_qcom_wlan_factory_nv.bin
+
+
