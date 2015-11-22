@@ -26,7 +26,7 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 # CAF Branch
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.par.branch=LA.BF.1.1.3-00110-8x26.0
+    ro.par.branch=LA.BF.1.1.3-00310-8x26.0
 
 # Hadware QCOM
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
