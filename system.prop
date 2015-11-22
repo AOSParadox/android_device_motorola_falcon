@@ -27,6 +27,12 @@ persist.audio.calfile6=/etc/Speaker_cal.acdb
 persist.sys.qc.sub.rdump.max=0
 ro.sf.lcd_density=280
 persist.radio.apn_delay=5000
+persist.radio.process_sups_ind=1
+persist.radio.all_bc_msg=all
+persist.radio.force_get_pref=1
+persist.radio.mot_ecc_enabled=1
+persist.radio.mot_ecc_custid=common
+persist.radio.set_dds_ia_apn=1
 persist.sys.media.use-awesome=false
 audio.offload.pcm.16bit.enable=false
 audio.offload.pcm.24bit.enable=false
@@ -39,7 +45,6 @@ ro.qc.sdk.izat.premium_enabled=0
 ro.qc.sdk.izat.service_mask=0x0
 persist.gps.qc_nlp_in_use=0
 ro.gps.agps_provider=1
-persist.sys.isUsbOtgEnabled=true
 ro.build.fingerprint=motorola/falcon_retuglb/falcon_umts:5.0.2/LXB22.99-36/35:user/release-keys
 ro.product.device=falcon_umts
 
@@ -118,7 +123,7 @@ ro.use_data_netmgrd=true
 persist.data.netmgrd.qos.enable=true
 
 #system props for time-services
-#persist.timed.enable=true
+persist.timed.enable=true
 
 #
 # system prop for opengles version
@@ -134,24 +139,27 @@ telephony.lteOnCdmaDevice=0
 #System property to turn on hfp client
 bluetooth.hfp.client=1
 
-# simulate sdcard on /data/media
 #
-persist.fuse_sdcard=false
+# enable esdfs by default
+#
 persist.esdfs_sdcard=true
-ro.crypto.fuse_sdcard=true
 
 #
 #snapdragon value add features
 #
+# System props for audio
 ro.qc.sdk.audio.ssr=false
 ##fluencetype can be "fluence" or "fluencepro" or "none"
 ro.qc.sdk.audio.fluencetype=fluence
+persist.audio.dualmic.config=endfire
 persist.audio.fluence.mode=endfire
 persist.audio.fluence.voicecall=true
+persist.audio.fluence.voicecomm=false
 persist.audio.fluence.voicerec=false
-persist.audio.fluence.speaker=true
+persist.audio.fluence.speaker=false
+
 persist.audio.handset.mic=digital
-ro.config.vc_call_vol_steps=7
+ro.config.vc_call_vol_steps=8
 # FM maximum volume be between 0 and 8192 (0dB)
 ro.audio.fm_max_volume=4096
 
@@ -212,7 +220,7 @@ audio.offload.disable=0
 audio.offload.buffer.size.kb=32
 
 #Enable offload audio video playback by default
-audio.offload.video=false
+audio.offload.video=true
 
 #enable voice path for PCM VoIP by default
 use.voice.path.for.pcm.voip=true
@@ -229,3 +237,6 @@ ro.min_freq_0=787200
 #will not work properly on KK as there are non-zero specific profile
 #exists in dtsi file, which is needed fo JB camera.
 persist.camera.num_cameras=2
+
+# radio logspamm
+persist.data.qmi.adb_logmask=0
