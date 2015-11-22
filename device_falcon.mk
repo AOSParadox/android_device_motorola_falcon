@@ -58,14 +58,8 @@ PRODUCT_PACKAGES += \
 
 # Dalvik
 PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.heapstartsize=8m \
-    dalvik.vm.heapgrowthlimit=96m \
-    dalvik.vm.heapsize=256m \
-    dalvik.vm.heaptargetutilization=0.75 \
-    dalvik.vm.heapminfree=2m \
-    dalvik.vm.heapmaxfree=8m \
-    dalvik.vm.image-dex2oat-filter=everything \
-    dalvik.vm.dex2oat-filter=everything
+    dalvik.vm.boot-dex2oat-threads=2 \
+    dalvik.vm.dex2oat-threads=4
 
 # FRP
 PRODUCT_PROPERTY_OVERRIDES += \
