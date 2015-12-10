@@ -21,7 +21,7 @@
 # definition file).
 #
 
--include device/motorola/msm8226-common/BoardConfigCommon.mk
+-include device/motorola/falcon/BoardConfigCommon.mk
 
 # inherit from the proprietary version
 -include vendor/motorola/xt1034/BoardConfigVendor.mk
