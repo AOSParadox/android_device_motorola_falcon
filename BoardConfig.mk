@@ -16,11 +16,7 @@
 # inherit from the proprietary version
 -include vendor/motorola/falcon/BoardConfigVendor.mk
 
-VENDOR_PATH := device/motorola/falcon
-
-BOARD_VENDOR := motorola-qcom
-
-TARGET_SPECIFIC_HEADER_PATH := $(VENDOR_PATH)/include
+TARGET_SPECIFIC_HEADER_PATH := device/motorola/falcon/include
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := xt1031,xt1032,xt1033,xt1034,falcon_umts,falcon_umtsds,falcon_cdma,falcon_retuaws,falcon,falcon_gpe
@@ -29,43 +25,36 @@ TARGET_OTA_ASSERT_DEVICE := xt1031,xt1032,xt1033,xt1034,falcon_umts,falcon_umtsd
 TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
 
 # Platform
-TARGET_BOARD_PLATFORM := msm8226
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno305
-
 USE_CLANG_PLATFORM_BUILD := true
-
-# Architecture
-TARGET_ARCH := arm
-TARGET_ARCH_VARIANT := armv7-a-neon
-TARGET_CPU_ABI := armeabi-v7a
-TARGET_CPU_ABI2 := armeabi
-TARGET_CPU_MEMCPY_BASE_OPT_DISABLE := true
-TARGET_CPU_VARIANT := krait
-
-# Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := MSM8226
-TARGET_NO_BOOTLOADER := true
 
 # Kernel
 TARGET_KERNEL_CONFIG := falcon_defconfig
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags
-BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_SEPARATED_DT := true
-BOARD_DTBTOOL_ARGS := --force-v2
-BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
-TARGET_KERNEL_SOURCE := kernel/motorola/msm8226
+
+# Architecture
+TARGET_NO_BOOTLOADER := true
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "qualcomm-smd"
 
 # Audio
-AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
-AUDIO_FEATURE_ENABLED_NEW_SAMPLE_RATE := true
 BOARD_USES_ALSA_AUDIO := true
+AUDIO_FEATURE_ENABLED_COMPRESS_CAPTURE := true
+AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := true
+AUDIO_FEATURE_ENABLED_EXTN_FORMATS := true
+AUDIO_FEATURE_ENABLED_EXTN_POST_PROC := true
+AUDIO_FEATURE_ENABLED_FLUENCE := true
+AUDIO_FEATURE_ENABLED_HFP := true
+AUDIO_FEATURE_ENABLED_HWDEP_CAL := false
+AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
+AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
+AUDIO_FEATURE_PCM_IOCTL_ENABLED := true
+AUDIO_FEATURE_ENABLED_PCM_OFFLOAD := true
+TARGET_USES_QCOM_MM_AUDIO := true
+USE_CUSTOM_AUDIO_POLICY := 1
 
 # Bluetooth
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(VENDOR_PATH)/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/motorola/falcon/bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
@@ -76,31 +65,16 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 # Charger
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
 
-# CMHW
-BOARD_HARDWARE_CLASS := $(VENDOR_PATH)/cmhw/
-
-# Display
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-TARGET_USES_C2D_COMPOSITION := true
-TARGET_USES_ION := true
-USE_OPENGL_RENDERER := true
-
 # FM Radio
 TARGET_QCOM_NO_FM_FIRMWARE := true
 
-# Fonts
-EXTENDED_FONT_FOOTPRINT := true
-
 # Init
 TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_LIBINIT_DEFINES_FILE := $(VENDOR_PATH)/init/init_falcon.cpp
+TARGET_LIBINIT_DEFINES_FILE := device/motorola/falcon/init/init_falcon.cpp
 TARGET_UNIFIED_DEVICE := true
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
-
-# Memory
-MALLOC_IMPL := dlmalloc
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 10485760
@@ -109,29 +83,23 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1023410176
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 5930598400 # 5930614784 - 16384
 BOARD_FLASH_BLOCK_SIZE := 131072
 
-# Properties
-TARGET_SYSTEM_PROP += $(VENDOR_PATH)/system.prop
-
 # Qualcomm support
-BOARD_USES_QCOM_HARDWARE := true
-
-# Radio
-TARGET_RIL_VARIANT := caf
+BOARD_USES_QCOM_HARDWARE := false
 
 # Recovery
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
-TARGET_RECOVERY_FSTAB := $(VENDOR_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_FSTAB := device/motorola/falcon/rootdir/etc/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
 # Release tools
-TARGET_RELEASETOOLS_EXTENSIONS := $(VENDOR_PATH)
+TARGET_RELEASETOOLS_EXTENSIONS := device/motorola/falcon
 
 # SELinux
 -include device/qcom/sepolicy/sepolicy.mk
 
-BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy
+BOARD_SEPOLICY_DIRS += device/motorola/falcon/sepolicy
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
