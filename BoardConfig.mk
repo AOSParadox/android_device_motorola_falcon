@@ -32,8 +32,9 @@ TARGET_BOARD_INFO_FILE := device/motorola/falcon/board-info.txt
 USE_CLANG_PLATFORM_BUILD := true
 
 # Kernel
+<<<<<<< HEAD:BoardConfig.mk
 TARGET_KERNEL_CONFIG := falcon_defconfig
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.bootdevice=msm_sdcc.1 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags
 BOARD_RAMDISK_OFFSET := 0x01000000 
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 
