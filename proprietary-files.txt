@@ -261,3 +261,22 @@ etc/firmware/venus.b03
 etc/firmware/venus.b04
 etc/firmware/venus.mbn
 etc/firmware/venus.mdt
+
+# proprietary files for falcon
+
+# Audio
+etc/Bluetooth_cal.acdb
+etc/General_cal.acdb
+etc/Global_cal.acdb
+etc/Handset_cal.acdb
+etc/Hdmi_cal.acdb
+etc/Headset_cal.acdb
+etc/Speaker_cal.acdb
+
+# Sensors
+bin/akmd8963
+lib/hw/sensors.msm8226.so
+
+# Touch fw
+etc/firmware/aps-Falc-01300000-0130-falcon.tdat
+etc/firmware/synaptics-s2316-13091704-175833-falcon.tdat

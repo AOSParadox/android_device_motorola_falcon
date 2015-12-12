@@ -2,6 +2,8 @@
 
 OUTDIR=vendor/$VENDOR/$DEVICE
 MAKEFILE=../../../$OUTDIR/$DEVICE-vendor-blobs.mk
+export DEVICE=falcon
+export VENDOR=motorola
 
 (cat << EOF) > $MAKEFILE
 # Copyright (C) 2015 The CyanogenMod Project

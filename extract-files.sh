@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export VENDOR=motorola
+export DEVICE=falcon
+
 function extract() {
     for FILE in `egrep -v '(^#|^$)' $1`; do
         OLDIFS=$IFS IFS=":" PARSING_ARRAY=($FILE) IFS=$OLDIFS
