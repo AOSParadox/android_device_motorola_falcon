@@ -50,13 +50,15 @@
 /dev/kgsl-2d0             0666   root       root
 /dev/kgsl-2d1             0666   root       root
 /dev/ion                  0664   system     system
-/dev/rtc0                 0600   system     system
+/dev/rtc0                 0660   system     system
 /dev/smd0                 0660   system     system
 /dev/smd4                 0660   system     system
 /dev/smd_cxm_qmi          0640   radio      radio
 /dev/smd5                 0660   system     system
 /dev/smd6                 0660   system     system
 /dev/smd7                 0660   bluetooth  bluetooth
+
+/dev/block/platform/msm_sdcc.1/by-name/frp 0600 system system
 
 #permissions for CSVT
 /dev/smd11                0660   radio      radio
@@ -112,10 +114,13 @@
 /dev/media*               0660   system     camera
 /dev/v4l-subdev*          0660   system     camera
 /dev/qseecom              0660   system     drmrpc
+/dev/pft                  0660   system     drmrpc
 /dev/gemini0              0660   system     camera
 /dev/jpeg0                0660   system     camera
 /dev/jpeg1                0660   system     camera
 /dev/jpeg2                0660   system     camera
+/dev/adsprpc-smd          0664   system     system
+/dev/system_health_monitor 0644  radio      system
 /dev/msm_camera/*         0660   system     camera
 /dev/gemini/              0660   system     camera
 /dev/mercury0             0660   system     camera
@@ -124,7 +129,7 @@
 /dev/msm_vidc_dec_sec     0660   system     audio
 /dev/msm_vidc_enc         0660   system     audio
 /dev/msm_rotator          0660   system     system
-/dev/hw_random            0664   root       root
+/dev/hw_random            0600   root       root
 /dev/adsprpc-smd          0660   media      camera
 
 #permissions for audio
@@ -151,6 +156,7 @@
 /dev/msm_preproc_ctl      0660   system     audio
 /dev/msm_rtac             0660   system     audio
 /dev/msm_voicememo        0660   system     audio
+/dev/radio0               0640   fm_radio   fm_radio
 /dev/smd3                 0660   bluetooth  net_bt_stack
 /dev/smd2                 0660   bluetooth  net_bt_stack
 /dev/ttyHSL1              0660   system     system
@@ -159,22 +165,13 @@
 /dev/sdio_tty_ciq_00      0660   system     system
 /dev/tty_sdio_00          0660   system     system
 /dev/ttyGS0               0660   system     system
-/dev/i2c-5                0660   media       media
+/dev/i2c-5                0660   media      media
 /dev/voice_svc            0660   system     audio
 
 # DVB devices
-/dev/dvb/adapter0/demux*  0444   media       media
-/dev/dvb/adapter0/dvr*    0664   media       media
-/dev/dvb/adapter0/video*  0664   media       media
-
-# Block devices
-/dev/block/platform/msm_sdcc.1/by-name/hob          0660 root radio
-/dev/block/platform/msm_sdcc.1/by-name/dhob         0660 root radio
-/dev/block/platform/msm_sdcc.1/by-name/clogo        0660 root radio
-/dev/block/platform/msm_sdcc.1/by-name/cid          0660 root mot_dbvc
-/dev/block/platform/msm_sdcc.1/by-name/logs         0640 root system
-/dev/block/platform/msm_sdcc.1/by-name/utags        0660 mot_tcmd system
-/dev/block/platform/msm_sdcc.1/by-name/utagsBackup  0660 mot_tcmd system
+/dev/dvb/adapter0/demux*  0440   media       media
+/dev/dvb/adapter0/dvr*    0660   media       media
+/dev/dvb/adapter0/video*  0660   media       media
 
 # Broadcast devices
 /dev/tsc_mux0             0660   media       media
@@ -198,11 +195,17 @@
 /sys/devices/virtual/input/input*                   rept_xy        0664    root     input
 /sys/devices/virtual/input/input*                   rept_z         0664    root     input
 /sys/devices/virtual/input/input*                   bandwidth      0664    root     input
+/sys/devices/virtual/input/input*                   range          0664    root     input
 /sys/devices/virtual/input/input*                   driver/enable  0660    root     input
+/sys/devices/virtual/input/input*                   driver/delay   0660    root     input
 
 # wlan
 /dev/wcnss_wlan           0660   system     system
 /dev/wcnss_ctrl           0660   system     system
+
+#nfc permissions
+/dev/nfc-nci              0660    nfc         nfc
+/dev/bcm2079x-i2c         0660  nfc          nfc
 
 # UIO devices
 /dev/uio0                 0660   system     system
@@ -235,6 +238,7 @@
 /dev/i2c-5                0660   root       system
 
 # SECURITY
+/dev/qseecom              0660   system     drmrpc
 /dev/sec                  0660   system     drmrpc
 
 # AK8963 Magnetometer
@@ -247,6 +251,9 @@
 # L3G4200D Gyro
 /dev/l3g4200d             0660   compass    compass
 
+#PN544 NFC
+/dev/pn544                0660   nfc        nfc
+
 # kernel logs
 /dev/log/kernel           0600   root       log
 
@@ -254,6 +261,14 @@
 /dev/stm401               0660  system     compass
 /dev/stm401_as            0660  compass    compass
 /dev/stm401_ms            0660  compass    compass
+/sys/devices/virtual/stm401/stm401_as* timestamp_time_ns    0440 compass compass
+/sys/devices/virtual/stm401/stm401_as* rv_6axis_update_rate 0660 compass compass
+/sys/devices/virtual/stm401/stm401_as* rv_9axis_update_rate 0660 compass compass
+
+# Moto Sensors
+/dev/stml0xx               0660  system     compass
+/dev/stml0xx_as            0660  compass    compass
+/dev/stml0xx_ms            0660  compass    compass
 
 # Validity Sensor
 /dev/vfsspi               0660  fingerp    fingerp
@@ -264,5 +279,5 @@
 # haptic
 /dev/drv2605              0660  system     system
 
-# From moto ueventd.rc
-/dev/assd                 0660   smartcard  smartcard
+# FB Quickdraw
+/dev/fb_quickdraw         0660  system     graphics

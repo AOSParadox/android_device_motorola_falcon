@@ -11,6 +11,8 @@
 /dev/block/platform/msm_sdcc.1/by-name/persist      /persist     ext4    ro,nosuid,nodev,barrier=1                                                      wait
 /dev/block/platform/msm_sdcc.1/by-name/boot         /boot        emmc    defaults                                                                       recoveryonly
 /dev/block/platform/msm_sdcc.1/by-name/recovery     /recovery    emmc    defaults                                                                       recoveryonly
+/dev/block/platform/msm_sdcc.1/by-name/frp          /frp         emmc    defaults                                                                       defaults
+/dev/block/platform/msm_sdcc.1/by-name/pds          /pds         ext4    rw,noatime,nodiratime,nosuid,nodev,barrier=1,data=ordered                      wait,check,notrim
 
 # SDCard
 /devices/msm_sdcc.2/mmc_host*                       auto         auto    defaults                                                                       voldmanaged=sdcard1:auto,encryptable=userdata
