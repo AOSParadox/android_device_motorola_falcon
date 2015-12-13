@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2015 CodeAurora Forums
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,9 +20,14 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # Inherit from falcon device
 $(call inherit-product, device/motorola/falcon/device.mk)
 
+# Inherit some common AOSParadox stuff.
+$(call inherit-product, vendor/aosparadox/common.mk)
+
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := falcon
 PRODUCT_NAME := full_falcon
 PRODUCT_BRAND := motorola
-PRODUCT_MODEL := falcon
+PRODUCT_MODEL := Moto G
 PRODUCT_MANUFACTURER := motorola
+
+PRODUCT_GMS_CLIENTID_BASE := android-motorola

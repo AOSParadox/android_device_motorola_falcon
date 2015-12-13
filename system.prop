@@ -66,7 +66,7 @@ ril.subscription.types=NV,RUIM
 DEVICE_PROVISIONED=1
 persist.radio.msgtunnel.start=false
 # Start in cdma mode
-# ro.telephony.default_network=5
+ro.telephony.default_network=5
 
 #
 # system props for the cne module
@@ -131,7 +131,7 @@ ro.opengles.version=196608
 #
 # System props for telephony
 # System prop to turn on CdmaLTEPhone always
-# telephony.lteOnCdmaDevice=1
+telephony.lteOnCdmaDevice=0
 
 #System property to turn on hfp client
 bluetooth.hfp.client=1
@@ -142,9 +142,18 @@ bluetooth.hfp.client=1
 ro.qc.sdk.audio.ssr=false
 ##fluencetype can be "fluence" or "fluencepro" or "none"
 ro.qc.sdk.audio.fluencetype=fluence
+persist.audio.dualmic.config=endfire
+persist.audio.fluence.mode=endfire
 persist.audio.fluence.voicecall=true
+persist.audio.fluence.voicecomm=false
 persist.audio.fluence.voicerec=false
-persist.audio.fluence.speaker=true
+persist.audio.fluence.speaker=false
+persist.audio.handset.mic=digital
+
+ro.config.vc_call_vol_steps=8
+
+# FM maximum volume be between 0 and 8192 (0dB)
+ro.audio.fm_max_volume=4096
 
 # Enable/disable cabl
 ro.qualcomm.cabl=0
@@ -179,3 +188,6 @@ ro.min_freq_0=787200
 #will not work properly on KK as there are non-zero specific profile
 #exists in dtsi file, which is needed fo JB camera.
 persist.camera.num_cameras=2
+
+# radio logspamm
+persist.data.qmi.adb_logmask=0

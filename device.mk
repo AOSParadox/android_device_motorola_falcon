@@ -26,15 +26,25 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,device/motorola/falcon/prebuilt/system,system)
 
+# CAF Branch
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.par.branch=LA.BF.1.1.3-00310-8x26.0
+
+# Hadware QCOM
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.hardware=qcom
+
+# WCNSS
+PRODUCT_COPY_FILES += \
+    device/qcom/msm8226/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
+PRODUCT_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
 
 
-# Screen density
-PRODUCT_AAPT_CONFIG := normal
-PRODUCT_AAPT_PREF_CONFIG := xhdpi
-
-$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+# CodeAurora MSM8226 Tree
+include device/qcom/msm8226/msm8226.mk
 
 # ANT+
 PRODUCT_PACKAGES += \

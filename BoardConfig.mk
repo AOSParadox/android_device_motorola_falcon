@@ -12,6 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+
+# inherit from common msm8226-common
+-include device/qcom/msm8226/BoardConfig.mk
 
 # inherit from the proprietary version
 -include vendor/motorola/falcon/BoardConfigVendor.mk
@@ -22,7 +26,7 @@ TARGET_SPECIFIC_HEADER_PATH := device/motorola/falcon/include
 TARGET_OTA_ASSERT_DEVICE := xt1031,xt1032,xt1033,xt1034,falcon_umts,falcon_umtsds,falcon_cdma,falcon_retuaws,falcon,falcon_gpe
 
 # Board
-TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
+TARGET_BOARD_INFO_FILE := device/motorola/falcon/board-info.txt
 
 # Platform
 USE_CLANG_PLATFORM_BUILD := true
@@ -30,6 +34,8 @@ USE_CLANG_PLATFORM_BUILD := true
 # Kernel
 TARGET_KERNEL_CONFIG := falcon_defconfig
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags
+BOARD_RAMDISK_OFFSET := 0x01000000 
+BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 
 # Architecture
 TARGET_NO_BOOTLOADER := true
@@ -69,7 +75,6 @@ BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
 TARGET_QCOM_NO_FM_FIRMWARE := true
 
 # Init
-TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_LIBINIT_DEFINES_FILE := device/motorola/falcon/init/init_falcon.cpp
 TARGET_UNIFIED_DEVICE := true
 
@@ -88,7 +93,7 @@ BOARD_USES_QCOM_HARDWARE := false
 
 # Recovery
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
-TARGET_RECOVERY_FSTAB := device/motorola/falcon/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_FSTAB := device/motorola/falcon/ramdisk/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
@@ -111,4 +116,6 @@ BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
 WIFI_DRIVER_FW_PATH_AP := "ap"
 WIFI_DRIVER_FW_PATH_STA := "sta"
+WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
+WIFI_DRIVER_MODULE_NAME := "wlan"
 WPA_SUPPLICANT_VERSION := VER_0_8_X

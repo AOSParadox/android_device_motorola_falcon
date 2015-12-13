@@ -1,0 +1,3 @@
+add_lunch_combo full_falcon-userdebug
+add_lunch_combo full_falcon-user
+add_lunch_combo full_falcon-eng
