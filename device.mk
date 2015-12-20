@@ -34,10 +34,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.hardware=qcom
 
-# WCNSS
-PRODUCT_COPY_FILES += \
-    device/qcom/msm8226/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
-
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
 PRODUCT_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
