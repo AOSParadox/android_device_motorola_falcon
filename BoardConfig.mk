@@ -40,6 +40,8 @@ BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 
 # Architecture
 TARGET_NO_BOOTLOADER := true
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno305
+TARGET_BOARD_PLATFORM := msm8226
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "qualcomm-smd"
@@ -74,6 +76,9 @@ BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
 
 # FM Radio
 TARGET_QCOM_NO_FM_FIRMWARE := true
+
+# Graphics
+TARGET_USES_C2D_COMPOSITION := true
 
 # Init
 TARGET_LIBINIT_DEFINES_FILE := device/motorola/falcon/init/init_falcon.cpp
