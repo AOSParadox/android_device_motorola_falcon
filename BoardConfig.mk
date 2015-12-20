@@ -28,9 +28,6 @@ TARGET_OTA_ASSERT_DEVICE := xt1031,xt1032,xt1033,xt1034,falcon_umts,falcon_umtsd
 # Board
 TARGET_BOARD_INFO_FILE := device/motorola/falcon/board-info.txt
 
-# Platform
-USE_CLANG_PLATFORM_BUILD := true
-
 # Kernel
 BOARD_CUSTOM_BOOTIMG_MK := device/motorola/falcon/mkbootimg.mk
 KERNEL_DEFCONFIG := falcon_defconfig
