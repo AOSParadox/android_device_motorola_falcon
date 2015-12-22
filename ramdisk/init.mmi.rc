@@ -1,6 +1,5 @@
 import init.mmi.overlay.rc
-import init.mmi.usb.rc
-import init.mmi.diag.rc
+import init.qcom.usb.rc
 
 on early-init
     # Set boot up stage I/O scheduler
@@ -67,7 +66,11 @@ on init
     # ESDFS
     chown mot_esdfs root /proc/fs/esdfs/packages
 
-on post-fs
+on fs
+    # Mount PDS
+    wait /dev/block/platform/msm_sdcc.1/by-name/pds
+    exec /system/bin/e2fsck -y /dev/block/platform/msm_sdcc.1/by-name/pds
+    exec /system/bin/logwrapper /system/bin/mount_ext4.sh pds /dev/block/platform/msm_sdcc.1/by-name/pds /pds 2048 500 defcontext=u:object_r:pds_file:s0
     restorecon_recursive /pds
 
     mkdir /pds/camera 0755 mot_tcmd mot_tcmd
@@ -95,7 +98,6 @@ on post-fs
     chmod 0664 /pds/bt/bt_bdaddr
     chmod 0600 /pds/whisper/whisper_only/vector0.bin
 
-on fs
     # Mount modem FSG partition
     wait /dev/block/platform/msm_sdcc.1/by-name/fsg
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/fsg /fsg ro nosuid nodev barrier=0 context=u:object_r:firmware_file:s0
