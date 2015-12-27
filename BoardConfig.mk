@@ -65,6 +65,9 @@ BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 
+# Block based OTA
+BLOCK_BASED_OTA := false
+
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
 
