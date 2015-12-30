@@ -69,6 +69,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     qemu.hw.mainkeys=0
 
+# Keylayouts
+PRODUCT_COPY_FILES += \
+    device/motorola/falcon/keylayout/msm8226-tapan9302-snd-card_Button_Jack.kl:system/usr/keylayout/msm8226-tapan9302-snd-card_Button_Jack.kl
+
 # Keystore
 PRODUCT_PACKAGES += \
     keystore.msm8226 \
