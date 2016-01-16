@@ -31,7 +31,7 @@ TARGET_BOARD_INFO_FILE := device/motorola/falcon/board-info.txt
 # Kernel
 BOARD_CUSTOM_BOOTIMG_MK := device/motorola/falcon/mkbootimg.mk
 KERNEL_DEFCONFIG := falcon_defconfig
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.bootdevice=msm_sdcc.1 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := androidboot.bootdevice=msm_sdcc.1 androidboot.hardware=qcom vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags
 BOARD_RAMDISK_OFFSET := 0x01000000 
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 
