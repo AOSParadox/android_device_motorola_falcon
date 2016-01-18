@@ -21,8 +21,16 @@ def FullOTA_Assertions(info):
   AddBootloaderAssertion(info, info.input_zip)
 
 
+def FullOTA_PostValidate(info):
+  ReplaceApnList(info)
+
+
 def IncrementalOTA_Assertions(info):
   AddBootloaderAssertion(info, info.target_zip)
+
+
+def IncrementalOTA_PostValidate(info):
+  ReplaceApnList(info)
 
 
 def AddBootloaderAssertion(info, input_zip):
@@ -33,3 +41,12 @@ def AddBootloaderAssertion(info, input_zip):
     if "*" not in bootloaders:
       info.script.AssertSomeBootloader(*bootloaders)
     info.metadata["pre-bootloader"] = m.group(1)
+
+
+def ReplaceApnList(info):
+  info.script.AppendExtra('if getprop("ro.boot.radio") == "0x3" then')
+  info.script.Mount("/system")
+  info.script.AppendExtra('delete("/system/etc/apns-conf.xml");')
+  info.script.AppendExtra('symlink("/system/etc/apns-conf-cdma.xml", "/system/etc/apns-conf.xml");')
+  info.script.Unmount("/system")
+  info.script.AppendExtra('endif;')

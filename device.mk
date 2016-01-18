@@ -52,6 +52,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     camera.msm8226
 
+# CDMA APN list
+PRODUCT_COPY_FILES += \
+    device/motorola/falcon/apns-conf-cdma.xml:system/etc/apns-conf-cdma.xml
+
 # Dalvik
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.boot-dex2oat-threads=2 \
