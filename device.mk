@@ -26,10 +26,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,device/motorola/falcon/prebuilt/system,system)
 
-# CAF Branch
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.par.branch=LA.BF.1.1.3-00310-8x26.0
-
 # Hadware QCOM
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.hardware=qcom
