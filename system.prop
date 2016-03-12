@@ -45,7 +45,6 @@ ro.usb.mtp_adb=0x2e76
 ro.usb.ptp=0x2e83
 ro.usb.ptp_adb=0x2e84
 ro.vendor.extension_library=/system/vendor/lib/libqti-perfd-client.so
-wlan.driver.config=/system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
 
 #
 # system.prop for msm8226
