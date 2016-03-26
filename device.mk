@@ -30,6 +30,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.hardware=qcom
 
+# CAF Branch
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.par.branch=LA.BF.1.1.3-01010-8x74.0
+
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
 PRODUCT_PACKAGE_OVERLAYS += device/motorola/falcon/overlay
